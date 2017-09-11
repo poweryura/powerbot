@@ -1,0 +1,509 @@
+
+<html>
+   <head>
+      <style type="text/css">
+         .sikuli-code {
+            font-size: 20px;
+            font-family: "Osaka-mono", Monospace;
+            line-height: 1.5em;
+            display:table-cell;
+            white-space: pre-wrap;       /* css-3 */
+            white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            width: 99%;   /* remove horizontal scroll-bar when viewing in IE7 */
+         }
+         .sikuli-code img {
+            vertical-align: middle;
+            margin: 2px;
+            border: 1px solid #ccc;
+            padding: 2px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-box-shadow: 1px 1px 1px gray;
+            -webkit-box-shadow: 1px 1px 2px gray;
+         }
+         .kw {
+            color: blue;
+         }
+         .skw {
+            color: rgb(63, 127, 127);
+         }
+
+         .str {
+            color: rgb(128, 0, 0);
+         }
+
+         .dig {
+            color: rgb(128, 64, 0);
+         }
+
+         .cmt {
+            color: rgb(200, 0, 200);
+         }
+
+         h2 {
+            display: inline;
+            font-weight: normal;
+         }
+
+         .info {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            display: none;
+         }
+
+         a {
+            color: #9D2900;
+         }
+
+         body {
+            font-family: "Trebuchet MS", Arial, Sans-Serif;
+         }
+
+      </style>
+   </head>
+<body>
+<div class="info">
+<h2>Fifa_beta_01.sikuli</h2> <a href="Fifa_beta_01.zip">(Download this script)</a>
+</div>
+<pre class="sikuli-code">
+<span class="kw">from</span> Sikuli <span class="kw">import</span> *
+<span class="kw">import</span> random
+<span class="kw">import</span> inspect
+<span class="kw">import</span> datetime
+<span class="kw">import</span> sys
+<span class="kw">import</span> traceback
+<span class="kw">import</span> webbrowser
+<span class="kw">import</span> os
+<span class="kw">import</span> smtplib
+<span class="cmt">#from picturesfifa import *</span>
+
+round=<span class="dig">0</span>
+contracts_bought=<span class="dig">0</span>
+sell=<span class="str">"n"</span>
+items_to_sell=<span class="dig">100</span>
+sell_min=str(<span class="dig">400</span>)
+sell_max=str(<span class="dig">450</span>)
+sell_min_rare=str(<span class="dig">750</span>)
+sell_max_rare=str(<span class="dig">900</span>)
+
+
+
+to_random=(<span class="dig">200</span>, <span class="dig">250</span>, <span class="dig">300</span>, <span class="dig">250</span>, <span class="dig">300</span>)
+
+<span class="cmt">#full_contract=Pattern("full_player_manager.png").exact().targetOffset(-1,-38)</span>
+<span class="cmt">#player=Pattern("manager_contract.png").similar(0.90).targetOffset(-6,-42)</span>
+player=<img src="player_contract.png" />
+player_rare=Pattern(<img src="player_rare.png" />).similar(<span class="dig">0.79</span>)
+to_sell_player=Pattern(<img src="to_sell_player.png" />).similar(<span class="dig">0.80</span>)
+full_contract=Pattern(<img src="full_player_contract.png" />).exact()
+won_contract=Pattern(<img src="won_contract.png" />).similar(<span class="dig">0.90</span>)
+
+<span class="cmt">#regions</span>
+full_contract_reg = Region(<span class="dig">12</span>,<span class="dig">136</span>,<span class="dig">806</span>,<span class="dig">436</span>)
+bid_reg = Region(<span class="dig">368</span>,<span class="dig">381</span>,<span class="dig">472</span>,<span class="dig">185</span>)
+trans_target_reg=Region(<span class="dig">559</span>,<span class="dig">445</span>,<span class="dig">267</span>,<span class="dig">47</span>)
+con_reg = Region(<span class="dig">18</span>,<span class="dig">468</span>,<span class="dig">1008</span>,<span class="dig">292</span>)
+
+transfers_tab_selected = <img src="transfers_tab_selected.png" />
+transfers_tab = <img src="transfers_tab.png" />
+transfer_market_selected = <img src="transfer_market_selected.png" />
+transfer_market = <img src="transfer_market.png" />
+consumables_tab_selected = Pattern(<img src="consumables_tab_selected.png" />).similar(<span class="dig">0.90</span>)
+consumables_tab = Pattern(<img src="consumables_tab.png" />).similar(<span class="dig">0.90</span>)
+trans_target=Pattern(<img src="trans_target_50.png" />).exact()
+both_contract=Pattern(<img src="common_contract.png" />).similar(<span class="dig">0.80</span>) <span class="cmt">#any item</span>
+store_all_in_the_club = Pattern(<img src="store_all_in_the_club.png" />).exact()
+quick_list_png = Pattern(<img src="quick_list_png.png" />).similar(<span class="dig">0.90</span>)
+min_price_sel = Pattern(<img src="min_price_sel.png" />).similar(<span class="dig">0.90</span>)
+ok_yellow = <img src="ok_yellow.png" />
+home = Pattern(<img src="home.png" />).similar(<span class="dig">0.60</span>)
+remove_all_experied = Pattern(<img src="remove_all_experied.png" />).similar(<span class="dig">0.60</span>)
+send_to_the_club = Pattern(<img src="send_to_the_club.png" />).similar(<span class="dig">0.80</span>)
+transfer_target = <img src="transfer_target.png" />
+min_pirce_buy = Pattern(<img src="min_pirce_buy.png" />).similar(<span class="dig">0.96</span>).targetOffset(<span class="dig">88</span>,<span class="dig">2</span>)
+search_button = Pattern(<img src="search_button.png" />).similar(<span class="dig">0.80</span>)
+account_locked = Pattern(<img src="account_locked.png" />).similar(<span class="dig">0.80</span>)
+
+<span class="kw">def</span> send_mail():
+    server = smtplib.SMTP(<span class="str">'smtp.gmail.com'</span>, <span class="dig">587</span>)
+    server.starttls()
+    server.login(<span class="str">"yyura2014@gmail.com"</span>, <span class="str">"Power1234"</span>)
+    msg = <span class="str">"Check BOT"</span>
+    server.sendmail(<span class="str">"yyura2014@gmail.com"</span>, <span class="str">"poweryura@gmail.com"</span>, msg)
+    server.quit()
+
+<span class="kw">def</span> restart_browser():
+    os.system(<span class="str">"taskkill /im firefox.exe"</span>)
+    <span class="skw">sleep</span>(<span class="dig">5</span>)
+    webbrowser.open(<span class="str">'https://www.easports.com/fifa/ultimate-team/web-app'</span>)
+    <span class="kw">try</span>:
+        <span class="skw">wait</span>(<img src="twitter.png" />,<span class="dig">120</span>)
+    <span class="kw">except</span> FindFailed:
+        <span class="kw">if</span> exists(account_locked):
+            send_mail()
+        <span class="kw">else</span>:
+                <span class="kw">try</span>:
+                   <span class="skw">click</span>(<img src="accept.png" />)
+mg src="page_refresh.png" />).similar(<span class="dig">0.90</span>))
+            <span class="skw">wait</span>(<img src="twitter.png" />,<span class="dig">120</span>)
+
+
+<span class="cmt">#Settings.MoveMouseDelay = 0</span>
+<span class="cmt">#sys.setrecursionlimit(10000)</span>
+restart_browser()
+
+first_hour = datetime.datetime.strftime(datetime.datetime.now(), <span class="str">'%Y-%m-%d %H'</span>)
+switchApp(<span class="str">"Mozilla Firefox"</span>)
+mozilla_size = App(<span class="str">"Mozilla Firefox"</span>).focusedWindow()
+<span class="kw">print</span> mozilla_size
+
+<span class="kw">def</span> timing(f):
+    <span class="kw">def</span> wrap(*args):
+        time1 = time.time()
+        ret = f(*args)
+        time2 = time.time()
+        <span class="kw">print</span> <span class="str">'%s function took %0.3f ms'</span> % (f.func_name, (time2-time1)*<span class="dig">1000.0</span>)
+        <span class="kw">return</span> ret
+    <span class="kw">return</span> wrap
+
+<span class="kw">def</span> order(match):
+    <span class="kw">return</span> match.x
+
+<span class="kw">def</span> WaitAndClick(image_name, timeout):
+    <span class="cmt">#mozilla_size.click(image_name)</span>
+    <span class="skw">wait</span>(image_name,timeout)
+    <span class="skw">click</span>(getLastMatch())
+
+<span class="kw">def</span> ClickFirstOrSecond(image1,image2,timeout=<span class="dig">0</span>):
+    <span class="kw">if</span> exists(image1,<span class="dig">0</span>): <span class="skw">click</span>(image1)
+    <span class="kw">else</span>: WaitAndClick(image2,<span class="dig">0</span>)
+
+<span class="kw">def</span> quick_list():
+    <span class="kw">if</span> <span class="kw">not</span> full_contract_reg.exists(full_contract,<span class="dig">2</span>):
+        hover(player)
+        <span class="skw">sleep</span>(<span class="dig">1</span>)
+        WaitAndClick(to_sell_player, <span class="dig">2</span>)
+        <span class="kw">print</span> <span class="str">"0"</span>
+    <span class="kw">try</span>:
+        <span class="kw">for</span> n <span class="kw">in</span> range(<span class="dig">1</span>, <span class="dig">50</span>):
+            <span class="kw">print</span> <span class="str">"1"</span>
+            <span class="skw">wait</span>(full_contract,<span class="dig">5</span>)
+            <span class="kw">print</span> <span class="str">"2"</span>
+            <span class="skw">sleep</span>(<span class="dig">1</span>)
+            <span class="skw">wait</span>(quick_list_png,<span class="dig">5</span>)
+            <span class="kw">print</span> <span class="str">"3"</span>
+            <span class="skw">sleep</span>(<span class="dig">1</span>)
+            <span class="kw">print</span> <span class="str">"4"</span>
+            <span class="skw">click</span>(quick_list_png)
+            <span class="kw">print</span> <span class="str">"5"</span>
+            <span class="skw">wait</span>(min_price_sel,<span class="dig">5</span>)
+            <span class="skw">click</span>(min_price_sel)
+            <span class="kw">if</span> full_contract_reg.exists(player_rare,<span class="dig">0</span>):
+                <span class="skw">type</span>(Key.BACKSPACE + Key.BACKSPACE + Key.BACKSPACE + Key.BACKSPACE + Key.BACKSPACE + sell_min_rare + Key.TAB + Key.TAB + Key.TAB + sell_max_rare)
+            <span class="kw">else</span>:
+                <span class="skw">type</span>(Key.BACKSPACE + Key.BACKSPACE + Key.BACKSPACE + Key.BACKSPACE + Key.BACKSPACE + sell_min + Key.TAB + Key.TAB + Key.TAB + sell_max)
+            <span class="skw">click</span>(ok_yellow)
+        <span class="skw">click</span>(home)
+    <span class="kw">except</span> FindFailed:
+            <span class="kw">print</span> <span class="str">"no contracts"</span>
+            <span class="skw">click</span>(home)
+
+<span class="kw">def</span> QuickListBidWon():
+    <span class="skw">wait</span>(won_contract,<span class="dig">5</span>)
+    <span class="skw">click</span>(remove_all_experied)
+    <span class="skw">sleep</span>(<span class="dig">5</span>)
+    <span class="kw">if</span> <span class="kw">not</span> full_contract_reg.exists(full_contract,<span class="dig">0</span>):
+        <span class="skw">click</span>(won_contract)
+    <span class="kw">try</span>:
+        <span class="kw">for</span> n <span class="kw">in</span> range(<span class="dig">1</span>, <span class="dig">50</span>):
+            <span class="skw">wait</span>(full_contract,<span class="dig">5</span>)
+            <span class="skw">wait</span>(send_to_the_club,<span class="dig">5</span>)
+            <span class="skw">click</span>(getLastMatch())
+            hover(transfer_target)
+    <span class="kw">except</span> FindFailed:
+            <span class="skw">click</span>(home)
+            <span class="skw">sleep</span>(<span class="dig">5</span>)
+
+<span class="kw">def</span> SetBuyNowMinMax():
+    <span class="kw">print</span> inspect.stack()[<span class="dig">0</span>][<span class="dig">3</span>]
+    WaitAndClick(min_pirce_buy,<span class="dig">10</span>)
+    <span class="skw">type</span>(str(random.choice((<span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">100</span>, <span class="dig">150</span>))) + Key.TAB + Key.TAB + Key.TAB + str(random.choice(to_random)))
+    WaitAndClick(search_button,<span class="dig">3</span>)
+    hover(Location(<span class="dig">520</span>, <span class="dig">10</span>))
+
+<span class="kw">def</span> ClickOnTransferTarget():
+    <span class="kw">print</span> inspect.stack()[<span class="dig">0</span>][<span class="dig">3</span>]
+    WaitAndClick(transfer_target,<span class="dig">3</span>)
+
+<span class="kw">def</span> ClickOnTransfer():
+    <span class="kw">print</span> inspect.stack()[<span class="dig">0</span>][<span class="dig">3</span>]
+    ClickFirstOrSecond(transfers_tab_selected, transfers_tab,<span class="dig">5</span>)
+
+<span class="kw">def</span> ClickOnTransferMarket():
+    <span class="kw">print</span> inspect.stack()[<span class="dig">0</span>][<span class="dig">3</span>]
+    ClickFirstOrSecond(transfer_market_selected, transfer_market,<span class="dig">5</span>)
+
+<span class="kw">def</span> ClickOnConsumables():
+    <span class="kw">print</span> inspect.stack()[<span class="dig">0</span>][<span class="dig">3</span>]
+    ClickFirstOrSecond(consumables_tab_selected,consumables_tab,<span class="dig">5</span>)
+
+<span class="kw">def</span> ClickOnMyClub():
+    hover(Pattern(<img src="my_club.png" />).similar(<span class="dig">0.50</span>))
+
+<span class="kw">def</span> ClickOnMyClubConsumables():
+    ClickOnMyClub()
+    hover(Pattern(<img src="staff.png" />).similar(<span class="dig">0.80</span>))
+    WaitAndClick(Pattern(<img src="club_consumables.png" />).similar(<span class="dig">0.90</span>),<span class="dig">3</span>)
+
+<span class="kw">def</span> ClickOnMyClubConsumablesContracts():
+    WaitAndClick(Pattern(<img src="my_CLub_Consumables_Contracts.png" />).similar(<span class="dig">0.60</span>), <span class="dig">10</span>)
+
+<span class="kw">def</span> GoToTransferListAndRelist():
+    <span class="kw">print</span> inspect.stack()[<span class="dig">0</span>][<span class="dig">3</span>]
+    ClickOnTransfer()
+    <span class="skw">sleep</span>(<span class="dig">3</span>)
+    <span class="skw">click</span>(<img src="1477026345213.png" />)
+    <span class="skw">sleep</span>(<span class="dig">10</span>)
+    <span class="kw">try</span>:
+        <span class="kw">print</span> <span class="str">"trying to remove all sold items"</span>
+        <span class="skw">wait</span>(player,<span class="dig">15</span>)
+        WaitAndClick(Pattern(<img src="remove_all_sold.png" />).similar(<span class="dig">0.50</span>),<span class="dig">15</span>)
+    <span class="kw">except</span> FindFailed:
+        <span class="kw">pass</span>
+    <span class="kw">try</span>:
+        <span class="kw">print</span> <span class="str">"trying to relist all sold items"</span>
+        <span class="skw">sleep</span>(<span class="dig">10</span>)
+        WaitAndClick(Pattern(<img src="RE-LIST-ALL.png" />).similar(<span class="dig">0.60</span>),<span class="dig">15</span>)
+        <span class="skw">sleep</span>(<span class="dig">10</span>)
+    <span class="kw">except</span> FindFailed:
+        <span class="kw">pass</span>
+
+@timing
+<span class="kw">def</span> SelectGoldContracts():
+    <span class="kw">print</span> inspect.stack()[<span class="dig">0</span>][<span class="dig">3</span>]
+    WaitAndClick(<img src="reset_button.png" />,<span class="dig">3</span>)
+    <span class="skw">wait</span>(Pattern(<img src="training_pic.png" />).similar(<span class="dig">0.90</span>),<span class="dig">2</span>)
+    WaitAndClick(Pattern(<img src="player_traning.png" />).similar(<span class="dig">0.90</span>),<span class="dig">3</span>)
+    WaitAndClick(Pattern(<img src="contracts-type.png" />).similar(<span class="dig">0.90</span>),<span class="dig">3</span>)
+    <span class="skw">wait</span>(Pattern(<img src="contract_logo.png" />).similar(<span class="dig">0.90</span>),<span class="dig">2</span>)
+    WaitAndClick(Pattern(<img src="type.png" />).exact().targetOffset(<span class="dig">1</span>,<span class="dig">48</span>),<span class="dig">5</span>)
+    WaitAndClick(Pattern(<img src="gold_search.png" />).similar(<span class="dig">0.90</span>),<span class="dig">5</span>)
+    <span class="skw">wait</span>(Pattern(<img src="gold_logo.png" />).similar(<span class="dig">0.80</span>),<span class="dig">3</span>)
+
+@timing
+<span class="kw">def</span> GoToContracts():
+    <span class="kw">print</span> inspect.stack()[<span class="dig">0</span>][<span class="dig">3</span>]
+    ClickOnTransfer()
+    ClickOnTransferMarket()
+    ClickOnConsumables()
+    SelectGoldContracts()
+
+<span class="kw">def</span> GoToSavedContracts():
+    <span class="kw">print</span> inspect.stack()[<span class="dig">0</span>][<span class="dig">3</span>]
+    <span class="kw">try</span>:
+        ClickOnMyClubConsumables()
+        ClickOnMyClubConsumablesContracts()
+    <span class="kw">except</span> FindFailed:
+        <span class="kw">print</span> <span class="str">"Navigation to consumables failed, trying again"</span>
+        StartScript()
+
+<span class="kw">def</span> ListSavedContracts():
+    <span class="kw">print</span> inspect.stack()[<span class="dig">0</span>][<span class="dig">3</span>]
+    GoToSavedContracts()
+    quick_list()
+
+<span class="kw">def</span> SaveWonContracts():
+    <span class="kw">print</span> inspect.stack()[<span class="dig">0</span>][<span class="dig">3</span>]
+    ClickOnTransferTarget()
+    QuickListBidWon()
+
+<span class="kw">def</span> BuyGoldContracts():
+    <span class="kw">print</span> inspect.stack()[<span class="dig">0</span>][<span class="dig">3</span>]
+    <span class="kw">try</span>:
+        <span class="kw">if</span> exists(<img src="back_button.png" />, <span class="dig">2</span>):
+            <span class="kw">print</span> <span class="str">"Something found, doing shopping"</span>
+            IterateAllContracts()
+        <span class="kw">else</span>:
+            <span class="skw">find</span>(Pattern(<img src="OK.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">29</span>,<span class="dig">0</span>))
+            <span class="skw">click</span>(getLastMatch())
+    <span class="kw">except</span> FindFailed:
+        <span class="kw">print</span> <span class="str">"failed with some capturing, starting from scratch"</span>
+        <span class="kw">pass</span>
+
+@timing
+<span class="kw">def</span> IterateAllContracts():
+    <span class="kw">print</span> inspect.stack()[<span class="dig">0</span>][<span class="dig">3</span>]
+    <span class="kw">global</span> player
+    <span class="kw">if</span> exists(player,<span class="dig">2</span>):
+        <span class="kw">try</span>:
+            <span class="kw">for</span> x <span class="kw">in</span> findAll(player):
+                con_reg.<span class="skw">click</span>(random.choice(list(findAll(player))))
+                hover(Location(<span class="dig">520</span>, <span class="dig">10</span>))
+                <span class="kw">if</span> full_contract_reg.exists(full_contract,<span class="dig">2</span>):
+                    <span class="kw">print</span> <span class="str">"clicked on contract"</span>
+                    BuyingProcedure()
+                <span class="kw">else</span>:
+                    IterateAllContracts()
+        <span class="kw">except</span> FindFailed:
+            <span class="kw">print</span> <span class="str">"Starting search again"</span>
+            <span class="kw">pass</span>
+    <span class="kw">try</span>:
+        ClickArrowAndContinue()
+    <span class="kw">except</span> FindFailed:
+        <span class="kw">pass</span>
+
+<span class="kw">def</span> ClickArrowAndContinue():
+    <span class="kw">print</span> <span class="str">" trying to click arrow"</span>
+    <span class="skw">click</span>(Pattern(<img src="next_page_arrow_active.png" />).similar(<span class="dig">0.65</span>).targetOffset(<span class="dig">11</span>,-<span class="dig">1</span>))
+    hover(Location(<span class="dig">520</span>, <span class="dig">10</span>))
+    IterateAllContracts()
+
+<span class="kw">def</span> BuyingProcedure():
+    <span class="kw">print</span> inspect.stack()[<span class="dig">0</span>][<span class="dig">3</span>]
+    <span class="kw">try</span>:
+        <span class="kw">if</span> exists(Pattern(<img src="buy_now_button.png" />).similar(<span class="dig">0.50</span>),<span class="dig">1</span>) <span class="kw">and</span> full_contract_reg.exists(full_contract,<span class="dig">1</span>):
+        <span class="cmt">#if  full_contract_reg.exists(full_contract,3) and bid_reg.exists(Pattern("bid_price.png").similar(0.80),2) and bid_reg.exists(Pattern("make_bid_button.png").exact(),1):    </span>
+            <span class="skw">click</span>(<img src="buy_now_button.png" />)
+            <span class="kw">print</span> <span class="str">"doing bind"</span>
+            <span class="cmt">#click(Pattern("make_bid_button.png").similar(0.90).targetOffset(104,1))</span>
+            WaitAndClick(Pattern(<img src="buy_now_button_ok.png" />).similar(<span class="dig">0.80</span>).targetOffset(-<span class="dig">12</span>,<span class="dig">6</span>),<span class="dig">2</span>)
+            <span class="cmt">#succsess = BidNotAcceptedChecking()</span>
+            succsess = BuyNotAcceptedChecking()
+            <span class="kw">print</span> <span class="str">"Contract bought : "</span> + str(succsess)
+            <span class="kw">if</span> succsess == <span class="str">"yes"</span>:
+                SaveOrSell(sell)
+        <span class="kw">else</span>:
+            <span class="kw">print</span> <span class="str">"Failed to BID, starting search from again"</span>
+            <span class="cmt">#if trans_target_reg.exists(trans_target,0):            </span>
+            <span class="cmt">#    SaveWonContracts() </span>
+    <span class="kw">except</span> FindFailed:
+        <span class="kw">print</span> <span class="str">"failed with some capturing, starting search from again"</span>
+        <span class="cmt">#if trans_target_reg.exists(trans_target,0):</span>
+        <span class="cmt">#    SaveWonContracts()</span>
+        <span class="cmt">#pass</span>
+
+<span class="kw">def</span> SellContractImmediately():
+    <span class="kw">print</span> inspect.stack()[<span class="dig">0</span>][<span class="dig">3</span>]
+    WaitAndClick(quick_list_png,<span class="dig">3</span>)
+    WaitAndClick(Pattern(<img src="min_price_sell.png" />).similar(<span class="dig">0.90</span>).targetOffset(<span class="dig">20</span>,<span class="dig">0</span>),<span class="dig">2</span>)
+    <span class="skw">type</span>(Key.BACKSPACE + Key.BACKSPACE + Key.BACKSPACE + Key.BACKSPACE + Key.BACKSPACE + sell_min + Key.TAB + Key.TAB + sell_max)
+    WaitAndClick(<img src="submit_list_ok.png" />,<span class="dig">3</span>)
+    <span class="skw">sleep</span>(<span class="dig">1</span>)
+    <span class="kw">print</span> <span class="str">"contract SENT to MARKET!!!"</span>
+
+<span class="kw">def</span> SaveOrSell(sell):
+    <span class="kw">print</span> inspect.stack()[<span class="dig">0</span>][<span class="dig">3</span>]
+    <span class="kw">if</span> sell==<span class="str">"y"</span>:
+        SellContractImmediately()
+    <span class="kw">else</span>:
+        WaitAndClick(send_to_the_club,<span class="dig">10</span>)
+        <span class="kw">print</span> <span class="str">"Saved contract"</span>
+
+@timing
+<span class="kw">def</span> InitiateMarketWipe(first_hour):
+    <span class="kw">print</span> inspect.stack()[<span class="dig">0</span>][<span class="dig">3</span>]
+    <span class="kw">print</span> first_hour
+    current_hour = datetime.datetime.strftime(datetime.datetime.now(), <span class="str">'%Y-%m-%d %H'</span>)
+    <span class="kw">print</span> current_hour
+    <span class="kw">if</span> first_hour != current_hour:
+        <span class="kw">print</span> <span class="str">"doing market WIPE"</span>
+        AutoAssignAll()
+        GoToTransferListAndRelist()
+        <span class="kw">print</span> <span class="str">"Listing contracts"</span>
+        ListSavedContracts()
+        first_hour = current_hour
+    <span class="kw">else</span>:
+        <span class="kw">pass</span>
+    <span class="kw">return</span> first_hour
+
+<span class="kw">def</span> BuyNotAcceptedChecking():
+    <span class="kw">print</span> inspect.stack()[<span class="dig">0</span>][<span class="dig">3</span>]
+    <span class="kw">if</span> exists(send_to_the_club,<span class="dig">2</span>):
+        bought = <span class="str">"yes"</span>
+        <span class="kw">global</span> contracts_bought
+        contracts_bought += <span class="dig">1</span>
+        <span class="kw">print</span> <span class="str">"bought CONTRACTS: "</span> + str(contracts_bought)
+    <span class="kw">elif</span> exists(<img src="bid_not_accepted.png" />,<span class="dig">2</span>):
+        <span class="kw">print</span> <span class="str">"YOR BID outbid((("</span>
+        <span class="skw">click</span>(<img src="OK.png" />)
+        bought = <span class="str">"no"</span>
+    <span class="kw">else</span>:
+        <span class="kw">global</span> contracts_bought
+        contracts_bought += <span class="dig">1</span>
+        <span class="kw">print</span> <span class="str">"Probably bought CONTRACTS: "</span> + str(contracts_bought)
+        bought = <span class="str">"yes"</span>
+    <span class="kw">return</span> bought
+
+<span class="kw">def</span> BidNotAcceptedChecking():
+    <span class="kw">print</span> inspect.stack()[<span class="dig">0</span>][<span class="dig">3</span>]
+    <span class="kw">if</span> exists(Pattern(<img src="green_check_box.png" />).similar(<span class="dig">0.80</span>),<span class="dig">2</span>):
+        bought = <span class="str">"yes"</span>
+        <span class="kw">global</span> contracts_bought
+        contracts_bought += <span class="dig">1</span>
+        <span class="kw">print</span> <span class="str">"bought CONTRACTS: "</span> + str(contracts_bought)
+    <span class="kw">elif</span> exists(<img src="bid_not_accepted.png" />,<span class="dig">1</span>):
+        <span class="kw">print</span> <span class="str">"YOR BID outbid((("</span>
+        <span class="skw">click</span>(<img src="OK.png" />)
+        bought = <span class="str">"no"</span>
+    <span class="kw">else</span>:
+        <span class="kw">global</span> contracts_bought
+        contracts_bought += <span class="dig">1</span>
+        <span class="kw">print</span> <span class="str">"Probably bought CONTRACTS: "</span> + str(contracts_bought)
+        bought = <span class="str">"yes"</span>
+    <span class="kw">return</span> bought
+
+@timing
+<span class="kw">def</span> AutoAssignAll():
+    <span class="kw">print</span> inspect.stack()[<span class="dig">0</span>][<span class="dig">3</span>]
+    <span class="kw">if</span> exists(Pattern(<img src="unassigned.png" />).similar(<span class="dig">0.80</span>),<span class="dig">0</span>):
+        <span class="kw">try</span>:
+            <span class="skw">click</span>(Pattern(<img src="unassigned.png" />).similar(<span class="dig">0.80</span>))
+            <span class="kw">print</span> <span class="str">"Assigning unassigned"</span>
+            WaitAndClick(<img src="auto_assign_allss.png" />,<span class="dig">2</span>)
+        <span class="kw">except</span> FindFailed:
+            <span class="kw">pass</span>
+
+<span class="kw">def</span> StartScript():
+    switchApp(<span class="str">"Mozilla Firefox"</span>)
+
+    <span class="kw">print</span> inspect.stack()[<span class="dig">0</span>][<span class="dig">3</span>]
+    <span class="kw">global</span> round
+    <span class="kw">global</span> first_hour
+    round += <span class="dig">1</span>
+    <span class="kw">print</span> <span class="str">"Global attempt = "</span> + str(round)
+    <span class="kw">if</span> exists(Pattern(<img src="OK.png" />).similar(<span class="dig">0.90</span>),<span class="dig">0</span>):
+        <span class="skw">click</span>(getLastMatch())
+    <span class="kw">elif</span> exists(Pattern(<img src="application_error.png" />).similar(<span class="dig">0.80</span>),<span class="dig">0</span>):
+        <span class="kw">print</span> <span class="str">"application_error!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"</span>
+        <span class="skw">click</span>(Pattern(<img src="close_browser.png" />).targetOffset(<span class="dig">32</span>,-<span class="dig">4</span>))
+        <span class="skw">sleep</span> (<span class="dig">4</span>)
+        <span class="cmt">#type(Key.F5, KeyModifier.CTRL)</span>
+        <span class="skw">click</span>(<img src="firefox_icon.png" />)
+        <span class="skw">sleep</span>(<span class="dig">30</span>)
+    <span class="kw">try</span>:
+        <span class="kw">while</span> True:
+            first_hour = InitiateMarketWipe(first_hour)
+            GoToContracts()
+            SetBuyNowMinMax()
+            BuyGoldContracts()
+
+    <span class="kw">except</span> FindFailed:
+        <span class="kw">try</span>:
+            <span class="skw">click</span>(Pattern(<img src="OK.png" />).similar(<span class="dig">0.80</span>))
+            StartScript()
+        <span class="kw">except</span> FindFailed:
+            StartScript()
+
+
+StartScript()
+<span class="cmt">#ListSavedContracts()</span>
+<span class="cmt">#ListSavedContracts()</span>
+<span class="cmt">#send_mail()</span>
+
+</pre>
+</body>
+</html>
