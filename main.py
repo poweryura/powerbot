@@ -1,18 +1,31 @@
 import random
 import inspect
 import datetime
+import yaml
 import sys
 import traceback
 import webbrowser
 import os
 from PIL import ImageGrab
-from Pics import Pics
+#from Pics import Pics
 import smtplib
 import pyautogui
 #import pywinauto
 
 
 #webbrowser.open('https://www.easports.com/fifa/ultimate-team/web-app')
+
+
+
+
+def get_config_file(file):
+    f = open(file)
+    Pics = yaml.safe_load(f)
+    f.close()
+    return Pics
+
+
+Pics = get_config_file('Pics.yaml')
 
 
 class Main:
@@ -61,7 +74,7 @@ class Main:
 
 
 start = Main()
-twitter = start.wait_for_picture(Pics.twitter, 1)
+twitter = start.wait_for_picture(Pics['home']['twitter'], 1)
 transfers_coo = start.wait_for_list_of_pictures([Pics.transfers_tab_selected, Pics.transfers_tab])
 start.click_on_center(transfers_coo)
 
