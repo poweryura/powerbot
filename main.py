@@ -84,7 +84,6 @@ class Main:
         ImageGrab.grab().save(current_time, "JPEG")
         print("Saved screenshot: %s" % current_time)
 
-    @timing
     def wait_for_picture(self, picture, time=2, screenshot=False):
         print("Waiting for picture: %s for %s seconds" % (picture, str(time)))
         coordinates = pyautogui.locateOnScreen(picture, time, region=browser_size, grayscale=False)
@@ -92,13 +91,10 @@ class Main:
             print("Picture: %s not found" % picture)
             if screenshot:
                 self.take_screenshot(picture)
-        else:
-            print(coordinates)
-            coordinates = pyautogui.center(coordinates)
         return coordinates
 
-    @timing
-    def wait_for_list_of_pictures(self, list_to_search, time=2, screenshot=False):
+    
+    def wait_for_list_of_pictures(self, list_to_search, time=2, screenshot=True):
         coordinates = None
         for picture in list_to_search:
             print("Waiting for picture: %s for %s seconds" % (picture, str(time)))
@@ -108,8 +104,6 @@ class Main:
                 if screenshot:
                     self.take_screenshot(picture)
             else:
-                print(coordinates)
-                coordinates = pyautogui.center(coordinates)
                 break
         return coordinates
 
@@ -118,8 +112,21 @@ class Main:
         if coordinates is None:
             print('Exiting as NONE!!!')
             sys.exit()
+        print(coordinates)
+        coordinates = pyautogui.center(coordinates)
+        print(coordinates)
         pyautogui.click(coordinates[0], coordinates[1])
-
+       
+    @staticmethod
+    def click_right_down_corner(coordinates):
+        if coordinates is None:
+            print('Exiting as NONE!!!')
+            sys.exit()
+        print(coordinates)
+        coordinates = (coordinates[0] + coordinates[2], coordinates[1]+coordinates[3])
+        pyautogui.click(coordinates)
+        print(coordinates)
+      
 
 w = WindowMgr()
 w.find_window_wildcard(".*FUT Web.*")
@@ -127,13 +134,17 @@ w.set_foreground()
 browser_size = w.getWindowSizes()
 
 
-start = Main()
-twitter = start.wait_for_picture(Pics.Home.twitter, 1)
-start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.transfers_selected, Pics.Tabs.transfers)))
-start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.TransferMarket.transfers_market_selected, Pics.Tabs.TransferMarket.transfers_market)))
-start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.TransferMarket.consumables_selected, Pics.Tabs.TransferMarket.consumables)))
-start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.reset_button))
-start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.TransferMarket.consumables_selected, Pics.Tabs.TransferMarket.consumables)))
-start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.Consumables.type_player_training))
-start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.Consumables.type_contracts))
-start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.search_button))
+@timing
+def go():
+    start = Main()
+    twitter = start.wait_for_picture(Pics.Home.twitter, 1)
+    start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.transfers_selected, Pics.Tabs.transfers)))
+    start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.TransferMarket.transfers_market_selected, Pics.Tabs.TransferMarket.transfers_market)))
+    start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.TransferMarket.consumables_selected, Pics.Tabs.TransferMarket.consumables)))
+    start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.reset_button))
+    start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.TransferMarket.consumables_selected, Pics.Tabs.TransferMarket.consumables)))
+    start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.Consumables.type_player_training))
+    start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.Consumables.type_contracts))
+    start.click_right_down_corner(start.wait_for_picture(Pics.Tabs.TransferMarket.search_button))
+
+go()
