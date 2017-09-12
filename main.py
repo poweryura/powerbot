@@ -112,9 +112,7 @@ class Main:
         if coordinates is None:
             print('Exiting as NONE!!!')
             sys.exit()
-        print(coordinates)
         coordinates = pyautogui.center(coordinates)
-        print(coordinates)
         pyautogui.click(coordinates[0], coordinates[1])
        
     @staticmethod
@@ -122,10 +120,8 @@ class Main:
         if coordinates is None:
             print('Exiting as NONE!!!')
             sys.exit()
-        print(coordinates)
         coordinates = (coordinates[0] + coordinates[2], coordinates[1]+coordinates[3])
         pyautogui.click(coordinates)
-        print(coordinates)
       
 
 w = WindowMgr()
@@ -137,7 +133,7 @@ browser_size = w.getWindowSizes()
 @timing
 def go():
     start = Main()
-    twitter = start.wait_for_picture(Pics.Home.twitter, 1)
+    start.wait_for_picture(Pics.Home.twitter, 1)
     start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.transfers_selected, Pics.Tabs.transfers)))
     start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.TransferMarket.transfers_market_selected, Pics.Tabs.TransferMarket.transfers_market)))
     start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.TransferMarket.consumables_selected, Pics.Tabs.TransferMarket.consumables)))
