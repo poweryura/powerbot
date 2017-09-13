@@ -19,13 +19,19 @@ class Tabs(object):
         class Consumables(object):
             type_player_training = 'type_player_training.png'
             type_contracts = 'type_contracts.png'
-    
+
+            class Quality(object):
+                quality = 'quality.png'
+                quality_gold = 'quality_gold.png'
+
+        class Pricing(object):
+            min_price = 'min_price.png'
+            max_price = 'max_price.png'
+            buy_now_min = 'buy_now_min.png'
+            buy_now_max = 'buy_now_max.png'
+
     class TransferTargets(object):
         transfers_target = 'transfer_target.png'
         transfers_target_selected = 'transfer_target_selected.png'
-    
-    class Pricing(object):
-        min_price = 'min_price.png'
-        max_price = 'max_price.png'
-        buy_now_min = 'buy_now_min.png'
-        buy_now_max = 'buy_now_max.png'
+
+
