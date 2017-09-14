@@ -15,7 +15,8 @@ class Tabs(object):
         
         reset_button = 'reset_button.png'
         search_button = 'search_button.png'
-        
+        back_button = 'back_button.png'
+
         class Consumables(object):
             type_player_training = 'type_player_training.png'
             type_contracts = 'type_contracts.png'
@@ -23,6 +24,10 @@ class Tabs(object):
             class Quality(object):
                 quality = 'quality.png'
                 quality_gold = 'quality_gold.png'
+
+            class Contracts(object):
+                contract_player_full = 'contract_player_full.png'
+                contract_player_small = 'contract_player_small.png'
 
         class Pricing(object):
             min_price = 'min_price.png'

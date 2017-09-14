@@ -4,6 +4,8 @@ import time
 import sys
 # import webbrowser
 # import os
+from itertools import count
+
 from PIL import ImageGrab
 import Pics
 # import smtplib
@@ -90,6 +92,7 @@ class Main:
             print("Picture: %s not found" % picture)
             if screenshot:
                 self.take_screenshot(picture)
+        print(coordinates)
         return coordinates
 
     def wait_for_list_of_pictures(self, list_to_search, wait_time=2, screenshot=False):
@@ -121,38 +124,63 @@ class Main:
             sys.exit()
         coordinates = (coordinates[0] + coordinates[2] + horizontal, coordinates[1] + coordinates[3] + vertical)
         pyautogui.click(coordinates)
-      
 
+
+class Search(Main):
+
+    def go_to_search(self, price):
+        start = Main()
+        # start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.transfers_selected, Pics.Tabs.transfers)))
+        # start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.TransferMarket.transfers_market_selected,
+        #                                                        Pics.Tabs.TransferMarket.transfers_market)))
+        # start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.TransferMarket.consumables_selected,
+        #                                                        Pics.Tabs.TransferMarket.consumables)))
+        # start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.reset_button))
+        # start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.TransferMarket.consumables_selected,
+        #                                                        Pics.Tabs.TransferMarket.consumables)))
+        # start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.Consumables.type_player_training))
+        # start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.Consumables.type_contracts))
+        #
+        # start.click_right_down_corner(start.wait_for_picture(Pics.Tabs.TransferMarket.Consumables.Quality.quality))
+        # start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.Consumables.Quality.quality_gold))
+        #
+        # start.click_right_down_corner(start.wait_for_picture(Pics.Tabs.TransferMarket.Pricing.buy_now_max),
+        #                               horizontal=-50)
+        # pyautogui.typewrite(price)
+        start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.search_button))
+        pyautogui.moveTo(100, 200, 1)
+        start.wait_for_picture(Pics.Tabs.TransferMarket.back_button, 5)
+
+
+
+    def count_contracts(self):
+        locate_players = pyautogui.locateAllOnScreen(
+            Pics.Tabs.TransferMarket.Consumables.Contracts.contract_player_small,
+            region=browser_size, grayscale=True)
+        # print(len(list(locate_players)))
+        for player in locate_players:
+            print(player)
+
+
+# webbrowser.open('https://www.easports.com/fifa/ultimate-team/web-app')
 w = WindowMgr()
 w.find_window_wildcard(".*FUT Web.*")
-# webbrowser.open('https://www.easports.com/fifa/ultimate-team/web-app')
 w.set_foreground()
 browser_size = w.getWindowSizes()
 
+browser_size_top = list(browser_size)
+browser_size_top[3] = int(browser_size[3]/2)
+browser_size_top = tuple(browser_size_top)
+print('TOP %s ' % str(browser_size_top))
 
-def go():
-    start = Main()
-    start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.transfers_selected, Pics.Tabs.transfers)))
-    start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.TransferMarket.transfers_market_selected,
-                                                           Pics.Tabs.TransferMarket.transfers_market)))
-    start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.TransferMarket.consumables_selected,
-                                                           Pics.Tabs.TransferMarket.consumables)))
-    start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.reset_button))
-    start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.TransferMarket.consumables_selected,
-                                                           Pics.Tabs.TransferMarket.consumables)))
-    start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.Consumables.type_player_training))
-    start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.Consumables.type_contracts))
-
-    start.click_right_down_corner(start.wait_for_picture(Pics.Tabs.TransferMarket.Consumables.Quality.quality))
-    start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.Consumables.Quality.quality_gold))
-
-    start.click_right_down_corner(start.wait_for_picture(Pics.Tabs.TransferMarket.Pricing.buy_now_max), horizontal=-50)
-    pyautogui.typewrite('300')
-    start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.search_button))
+browser_size_bottom = list(browser_size)
+browser_size_bottom[1] = int(browser_size[3]/2) + browser_size[1]
+browser_size_bottom = tuple(browser_size_bottom)
+print('Bottom %s ' % str(browser_size_bottom))
 
 
-# go()
-#
-# def search_for_contracts():
-#
-#
+search_for_contract = Search()
+search_for_contract.go_to_search('300')
+search_for_contract.count_contracts()
+
+
