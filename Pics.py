@@ -35,6 +35,9 @@ class Tabs(object):
             buy_now_min = 'buy_now_min.png'
             buy_now_max = 'buy_now_max.png'
 
+        class Messages(object):
+            message_no_search_results = 'message_no_search_results.png'
+
     class TransferTargets(object):
         transfers_target = 'transfer_target.png'
         transfers_target_selected = 'transfer_target_selected.png'

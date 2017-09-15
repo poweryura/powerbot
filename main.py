@@ -5,6 +5,7 @@ import sys
 # import webbrowser
 # import os
 from itertools import count
+from multiprocessing import Process
 
 from PIL import ImageGrab
 import Pics
@@ -21,7 +22,7 @@ import re
 #     f.close()
 #     return Pics
 #
-#Pics = get_config_file('Pics.yaml')
+# Pics = get_config_file('Pics.yaml')
 
 
 # connect to another process spawned by explorer.exe
@@ -34,7 +35,8 @@ import re
 
 class WindowMgr:
     """Encapsulates some calls to the winapi for window management"""
-    def __init__ (self):
+
+    def __init__(self):
         """Constructor"""
         self._handle = None
 
@@ -46,7 +48,7 @@ class WindowMgr:
         """Pass to win32gui.EnumWindows() to check all the opened windows"""
         if re.match(wildcard, str(win32gui.GetWindowText(hwnd))) is not None:
             self._handle = hwnd
-        
+
     def find_window_wildcard(self, wildcard):
         self._handle = None
         win32gui.EnumWindows(self._window_enum_callback, wildcard)
@@ -65,26 +67,39 @@ class WindowMgr:
         return rect
 
 
+
+#
+# browser_size_top = list(browser_size)
+# browser_size_top[3] = int(browser_size[3] / 2)
+# browser_size_top = tuple(browser_size_top)
+# print('TOP %s ' % str(browser_size_top))
+#
+# browser_size_bottom = list(browser_size)
+# browser_size_bottom[1] = int(browser_size[3] / 2) + browser_size[1]
+# browser_size_bottom = tuple(browser_size_bottom)
+# print('Bottom %s ' % str(browser_size_bottom))
+
+
 def timing(f):
     def wrap(*args):
         time1 = time.time()
         ret = f(*args)
         time2 = time.time()
-        print('%s function took %0.3f ms' % (f.__name__, (time2-time1)*1000.0))
+        print('%s function took %0.3f ms' % (f.__name__, (time2 - time1) * 1000.0))
         return ret
+
     return wrap
 
 
 class Main:
-    def __init__(self):
-        pass
 
     @staticmethod
     def take_screenshot(prefix=''):
-        current_time = str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')) + prefix+".jpg"
+        current_time = str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')) + prefix + ".jpg"
         ImageGrab.grab().save(current_time, "JPEG")
         print("Saved screenshot: %s" % current_time)
 
+    @timing
     def wait_for_picture(self, picture, wait_time=2, screenshot=False):
         print("Waiting for picture: %s for %s seconds" % (picture, str(wait_time)))
         coordinates = pyautogui.locateOnScreen(picture, wait_time, region=browser_size, grayscale=True)
@@ -95,6 +110,7 @@ class Main:
         print(coordinates)
         return coordinates
 
+    @timing
     def wait_for_list_of_pictures(self, list_to_search, wait_time=2, screenshot=False):
         coordinates = None
         for picture in list_to_search:
@@ -116,7 +132,7 @@ class Main:
             sys.exit()
         coordinates = pyautogui.center(coordinates)
         pyautogui.click(coordinates[0], coordinates[1])
-       
+
     @staticmethod
     def click_right_down_corner(coordinates, vertical=0, horizontal=0):
         if coordinates is None:
@@ -129,7 +145,6 @@ class Main:
 class Search(Main):
 
     def go_to_search(self, price):
-        start = Main()
         # start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.transfers_selected, Pics.Tabs.transfers)))
         # start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.TransferMarket.transfers_market_selected,
         #                                                        Pics.Tabs.TransferMarket.transfers_market)))
@@ -147,40 +162,67 @@ class Search(Main):
         # start.click_right_down_corner(start.wait_for_picture(Pics.Tabs.TransferMarket.Pricing.buy_now_max),
         #                               horizontal=-50)
         # pyautogui.typewrite(price)
-        start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.search_button))
-        pyautogui.moveTo(100, 200, 1)
-        start.wait_for_picture(Pics.Tabs.TransferMarket.back_button, 5)
+        self.click_on_center(self.wait_for_picture(Pics.Tabs.TransferMarket.search_button))
+        pyautogui.moveTo(100, 200)
 
+    def wait_for_search_result(self):
+        self.wait_for_picture(Pics.Tabs.TransferMarket.back_button, 7)
 
+    def wait_for_search_result2(self):
+        self.wait_for_picture(Pics.Tabs.TransferMarket.Messages.message_no_search_results, 7)
 
-    def count_contracts(self):
+    @staticmethod
+    def count_contracts():
         locate_players = pyautogui.locateAllOnScreen(
             Pics.Tabs.TransferMarket.Consumables.Contracts.contract_player_small,
             region=browser_size, grayscale=True)
         # print(len(list(locate_players)))
+        print('LIST OF PLAYERS')
         for player in locate_players:
             print(player)
 
 
 # webbrowser.open('https://www.easports.com/fifa/ultimate-team/web-app')
-w = WindowMgr()
-w.find_window_wildcard(".*FUT Web.*")
-w.set_foreground()
-browser_size = w.getWindowSizes()
-
-browser_size_top = list(browser_size)
-browser_size_top[3] = int(browser_size[3]/2)
-browser_size_top = tuple(browser_size_top)
-print('TOP %s ' % str(browser_size_top))
-
-browser_size_bottom = list(browser_size)
-browser_size_bottom[1] = int(browser_size[3]/2) + browser_size[1]
-browser_size_bottom = tuple(browser_size_bottom)
-print('Bottom %s ' % str(browser_size_bottom))
 
 
-search_for_contract = Search()
-search_for_contract.go_to_search('300')
-search_for_contract.count_contracts()
+#
+# p1 = Process(target=search_for_contract.wait_for_search_result())
+# print('@@@@@@@@@@@@@@@@@@@')
+# p2 = Process(target=search_for_contract.wait_for_search_result2())
+#
+# p1.start()
+# p2.start()
+#
+# p1.join()
+# p2.join()
 
 
+
+def func1():
+    print ('start func1')
+    for i in 'powerpowerpowerpower':
+        print('end func1')
+
+def func2():
+    print('start func2')
+
+    for i in 'powerpowerpowerpower':
+        print('end func2')
+
+if __name__=='__main__':
+    w = WindowMgr()
+    w.find_window_wildcard(".*FUT Web.*")
+    w.set_foreground()
+    browser_size = w.getWindowSizes()
+
+    search_for_contract = Search()
+    search_for_contract.go_to_search('300')
+    print('!!!!!!!!!!!!!!!!!')
+    search_for_contract.count_contracts()
+    procs = []
+    p1 = Process(target=search_for_contract.wait_for_search_result())
+    p2 = Process(target=search_for_contract.wait_for_search_result2())
+    p1.start()
+    p2.start()
+    p1.join()
+    p2.join()
