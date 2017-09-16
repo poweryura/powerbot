@@ -96,13 +96,14 @@ def timing(f):
     return wrap
 
 
-def take_screenshot(prefix=''):
+def take_screenshot(prefix, global_browser_size):
     current_time = str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')) + '_' + prefix + '_' ".jpg"
-    ImageGrab.grab().save(current_time, "JPEG")
+    ImageGrab.grab(bbox=global_browser_size).save(current_time, "JPEG")
     print("Saved screenshot: %s" % current_time)
 
 
 class Main:
+
     @staticmethod
     @timing
     def wait_for_picture(picture, global_browser_size, wait_time=1, screenshot=False):
@@ -111,7 +112,7 @@ class Main:
         if coordinates is None:
             print("!!!!!!!!!!!!!Picture: %s not found!!!!!!!!!!!!!" % picture)
             if screenshot:
-                take_screenshot(picture)
+                take_screenshot(picture, global_browser_size)
                 return None
         else:
             print('*******Found: %s at %s *******' % (picture, coordinates))
@@ -185,7 +186,7 @@ class Search:
 
     # @staticmethod
     def wait_for_search_result(self):
-        result1 = Main.wait_for_picture(Pics.Test.pic1, self.global_browser_size_bottom, 5)
+        result1 = Main.wait_for_picture(Pics.Test.pic1, self.global_browser_size_bottom, 5, True)
         if result1 is None:
             print('Exiting from search func1')
             pass
