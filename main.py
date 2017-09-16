@@ -15,9 +15,6 @@ import pyautogui
 import win32gui
 import re
 
-screen_size = (0, 0, 1919, 1079)
-screen_size = (0, 0, 1024, 768)
-
 
 # def get_config_file(file):
 #     f = open(file)
@@ -86,11 +83,6 @@ class WindowMgr:
         browser_size_bottom_v = tuple(browser_size_bottom_v)
         print('Browser BOTTOM size is %s ' % str(browser_size_bottom_v))
         return browser_size_bottom_v
-#
-# browser_size_bottom = list(browser_size)
-# browser_size_bottom[1] = int(browser_size[3] / 2) + browser_size[1]
-# browser_size_bottom = tuple(browser_size_bottom)
-# print('Bottom %s ' % str(browser_size_bottom))
 
 
 def timing(f):
@@ -104,29 +96,26 @@ def timing(f):
     return wrap
 
 
-def take_screenshot(prefix='', size=screen_size):
-        print(size)
-        current_time = str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')) + '_' + prefix + '_' ".jpg"
-        ImageGrab.grab(bbox=size).save(current_time, "JPEG")
-        #pyautogui.screenshot(current_time, region=size)
-        print("Saved screenshot: %s" % current_time)
+def take_screenshot(prefix=''):
+    current_time = str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')) + '_' + prefix + '_' ".jpg"
+    ImageGrab.grab().save(current_time, "JPEG")
+    print("Saved screenshot: %s" % current_time)
 
 
 class Main:
-
     @staticmethod
     @timing
-    def wait_for_picture(picture, wait_time=1, screenshot=False):
+    def wait_for_picture(picture, global_browser_size, wait_time=1, screenshot=False):
         print("Waiting for picture: %s for %s seconds" % (picture, str(wait_time)))
-        coordinates = pyautogui.locateOnScreen(picture, wait_time, grayscale=True)
+        coordinates = pyautogui.locateOnScreen(picture, wait_time, region=global_browser_size, grayscale=True)
         if coordinates is None:
-            print("Picture: %s not found!!!!!!!!!!!!!" % picture)
+            print("!!!!!!!!!!!!!Picture: %s not found!!!!!!!!!!!!!" % picture)
             if screenshot:
                 take_screenshot(picture)
-        print('Found: %s at %s ' % (picture, coordinates))
-        return coordinates
-
-
+                return None
+        else:
+            print('*******Found: %s at %s *******' % (picture, coordinates))
+            return coordinates
 
     # @staticmethod
     # @timing
@@ -161,7 +150,14 @@ class Main:
         pyautogui.click(coordinates)
 
 
-class Search(Main):
+class Search:
+    def __init__(self):
+        w = WindowMgr()
+        w.find_window_wildcard(".*EA SPORTS.*")
+        w.set_foreground()
+        self.global_browser_size = w.getWindowSizes()
+        self.global_browser_size_top = w.getWindowTopSizes()
+        self.global_browser_size_bottom = w.getWindowBottomSizes()
 
     @staticmethod
     def go_to_search(price):
@@ -183,59 +179,67 @@ class Search(Main):
         #                               horizontal=-50)
         # pyautogui.typewrite(price)
 
-        #self.click_on_center(self.wait_for_picture(Pics.Tabs.TransferMarket.search_button))
-        pyautogui.moveTo(100, 200, 1)
+        # self.click_on_center(self.wait_for_picture(Pics.Tabs.TransferMarket.search_button))
+        # pyautogui.moveTo(100, 200, 1)
+        print('doing SEARCH')
 
-    @staticmethod
-    def _search_contracts():
-        print('search_contracts')
-        pass
-
-    @staticmethod
-    def wait_for_search_result():
-        result1 = Main.wait_for_picture(Pics.Test.pic1, 10)
+    # @staticmethod
+    def wait_for_search_result(self):
+        result1 = Main.wait_for_picture(Pics.Test.pic1, self.global_browser_size_bottom, 5)
         if result1 is None:
+            print('Exiting from search func1')
             pass
         else:
             print('call buy method')
+            Test.count_contracts(self.global_browser_size)
 
-    @staticmethod
-    def wait_for_search_result2():
-        Main.wait_for_picture(Pics.Test.pic2, 10)
+    def wait_for_search_result2(self):
+        result2 = Main.wait_for_picture(Pics.Test.pic2, self.global_browser_size_bottom, 5)
+        if result2 is None:
+            print('Exiting from search func2')
+            pass
+        else:
+            print('call buy method2')
 
+    def wait_for_search_result3(self):
+        result3 = Main.wait_for_picture(Pics.Test.pic3, self.global_browser_size_bottom, 5)
+        if result3 is None:
+            print('Exiting from search func3')
+            pass
+        else:
+            print('call buy method3')
+
+
+class Test:
     @staticmethod
-    def count_contracts():
+    def count_contracts(global_browser_size):
+        print('SIZE for searching contracts: %s' % str(global_browser_size))
+        print('Counting contracts:')
+        print(global_browser_size)
         locate_players = pyautogui.locateAllOnScreen(
             Pics.Tabs.TransferMarket.Consumables.Contracts.contract_player_small,
-            region=browser_size, grayscale=True)
+            region=global_browser_size, grayscale=True)
         # print(len(list(locate_players)))
-        print('LIST OF PLAYERS')
+        print('LIST OF PLAYERS:')
         for player in locate_players:
             print(player)
 
 
-# webbrowser.open('https://www.easports.com/fifa/ultimate-team/web-app')
-
 if __name__ == '__main__':
+
+    # webbrowser.open('https://www.easports.com/fifa/ultimate-team/web-app')
+
     run = 0
-    w = WindowMgr()
-    w.find_window_wildcard(".*EA SPORTS.*")
-    w.set_foreground()
-    browser_size = w.getWindowSizes()
-    browser_size_top = w.getWindowTopSizes()
-    browser_size_bottom = w.getWindowBottomSizes()
-    time.sleep(1)
+    for i in '1':
+        time.sleep(1)
+        search_for_contract = Search()
+        search_for_contract.go_to_search(300)
+        run += 1
+        print('Run = %i' % run)
+        p1 = Process(target=search_for_contract.wait_for_search_result)
+        p2 = Process(target=search_for_contract.wait_for_search_result2)
+        p3 = Process(target=search_for_contract.wait_for_search_result3)
 
-
-    # time.sleep(1)
-    # #while True:
-    time.sleep(1)
-    search_for_contract = Search()
-    search_for_contract.go_to_search(300)
-    run += 1
-    print('Run := %i' % run)
-    p1 = Process(target=search_for_contract.wait_for_search_result)
-    p2 = Process(target=search_for_contract.wait_for_search_result2)
-    p1.start()
-    p2.start()
-
+        p1.start()
+        p2.start()
+        p3.start()

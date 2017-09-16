@@ -44,5 +44,6 @@ class Tabs(object):
 
 
 class Test(object):
-    pic1 = 'web_app.png'
+    pic1 = 'instagram.png'
     pic2 = 'facebook.png'
+    pic3 = 'sign_up.png'
