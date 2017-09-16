@@ -15,6 +15,9 @@ import pyautogui
 import win32gui
 import re
 
+screen_size = (0, 0, 1919, 1079)
+screen_size = (0, 0, 1024, 768)
+
 
 # def get_config_file(file):
 #     f = open(file)
@@ -101,9 +104,11 @@ def timing(f):
     return wrap
 
 
-def take_screenshot(prefix=''):
+def take_screenshot(prefix='', size=screen_size):
+        print(size)
         current_time = str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')) + '_' + prefix + '_' ".jpg"
-        ImageGrab.grab().save(current_time, "JPEG")
+        ImageGrab.grab(bbox=size).save(current_time, "JPEG")
+        #pyautogui.screenshot(current_time, region=size)
         print("Saved screenshot: %s" % current_time)
 
 
@@ -219,16 +224,18 @@ if __name__ == '__main__':
     browser_size = w.getWindowSizes()
     browser_size_top = w.getWindowTopSizes()
     browser_size_bottom = w.getWindowBottomSizes()
-
     time.sleep(1)
-    while True:
-        time.sleep(1)
-        search_for_contract = Search()
-        search_for_contract.go_to_search(300)
-        run += 1
-        print('Run := %i' % run)
-        p1 = Process(target=search_for_contract.wait_for_search_result)
-        p2 = Process(target=search_for_contract.wait_for_search_result2)
-        p1.start()
-        p2.start()
+
+
+    # time.sleep(1)
+    # #while True:
+    time.sleep(1)
+    search_for_contract = Search()
+    search_for_contract.go_to_search(300)
+    run += 1
+    print('Run := %i' % run)
+    p1 = Process(target=search_for_contract.wait_for_search_result)
+    p2 = Process(target=search_for_contract.wait_for_search_result2)
+    p1.start()
+    p2.start()
 
