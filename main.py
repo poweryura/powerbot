@@ -62,17 +62,27 @@ class WindowMgr:
 
     def getWindowSizes(self):
         """Return a list of tuples (handler, (width, height)) for each real window"""
-        rect = win32gui.GetWindowRect(self._handle)
-        print('Browser size is %s' % str(rect))
-        return rect
+        browser_size_v = win32gui.GetWindowRect(self._handle)
+        print('Browser size is %s' % str(browser_size_v))
+        return browser_size_v
 
+    def getWindowTopSizes(self):
+        """Return a list of tuples (handler, (width, height)) for each real window"""
+        browser_size_top_v = win32gui.GetWindowRect(self._handle)
+        browser_size_top_v = list(browser_size_top_v)
+        browser_size_top_v[3] = int(browser_size_top_v[3] / 2)
+        browser_size_top_v = tuple(browser_size_top_v)
+        print('Browser TOP size is %s ' % str(browser_size_top_v))
+        return browser_size_top_v
 
-
-#
-# browser_size_top = list(browser_size)
-# browser_size_top[3] = int(browser_size[3] / 2)
-# browser_size_top = tuple(browser_size_top)
-# print('TOP %s ' % str(browser_size_top))
+    def getWindowBottomSizes(self):
+        """Return a list of tuples (handler, (width, height)) for each real window"""
+        browser_size_bottom_v = win32gui.GetWindowRect(self._handle)
+        browser_size_bottom_v = list(browser_size_bottom_v)
+        browser_size_bottom_v[1] = int(browser_size_bottom_v[3] / 2) + browser_size_bottom_v[1]
+        browser_size_bottom_v = tuple(browser_size_bottom_v)
+        print('Browser BOTTOM size is %s ' % str(browser_size_bottom_v))
+        return browser_size_bottom_v
 #
 # browser_size_bottom = list(browser_size)
 # browser_size_bottom[1] = int(browser_size[3] / 2) + browser_size[1]
@@ -91,39 +101,43 @@ def timing(f):
     return wrap
 
 
-class Main:
-
-    @staticmethod
-    def take_screenshot(prefix=''):
-        current_time = str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')) + prefix + ".jpg"
+def take_screenshot(prefix=''):
+        current_time = str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')) + '_' + prefix + '_' ".jpg"
         ImageGrab.grab().save(current_time, "JPEG")
         print("Saved screenshot: %s" % current_time)
 
+
+class Main:
+
+    @staticmethod
     @timing
-    def wait_for_picture(self, picture, wait_time=2, screenshot=False):
+    def wait_for_picture(picture, wait_time=1, screenshot=False):
         print("Waiting for picture: %s for %s seconds" % (picture, str(wait_time)))
-        coordinates = pyautogui.locateOnScreen(picture, wait_time, region=browser_size, grayscale=True)
+        coordinates = pyautogui.locateOnScreen(picture, wait_time, grayscale=True)
         if coordinates is None:
-            print("Picture: %s not found" % picture)
+            print("Picture: %s not found!!!!!!!!!!!!!" % picture)
             if screenshot:
-                self.take_screenshot(picture)
-        print(coordinates)
+                take_screenshot(picture)
+        print('Found: %s at %s ' % (picture, coordinates))
         return coordinates
 
-    @timing
-    def wait_for_list_of_pictures(self, list_to_search, wait_time=2, screenshot=False):
-        coordinates = None
-        for picture in list_to_search:
-            print("Waiting for picture: %s for %s seconds" % (picture, str(wait_time)))
-            coordinates = pyautogui.locateOnScreen(picture, wait_time, region=browser_size, grayscale=True)
-            if coordinates is None:
-                print("Picture: %s not found" % picture)
-                if screenshot:
-                    self.take_screenshot(picture)
-            else:
-                print(coordinates)
-                break
-        return coordinates
+
+
+    # @staticmethod
+    # @timing
+    # def wait_for_list_of_pictures(list_to_search, wait_time=1, screenshot=False):
+    #     coordinates = None
+    #     for picture in list_to_search:
+    #         print("Waiting for picture: %s for %s seconds" % (picture, str(wait_time)))
+    #         coordinates = pyautogui.locateOnScreen(picture, wait_time, region=browser_size, grayscale=True)
+    #         if coordinates is None:
+    #             print("Picture: %s not found" % picture)
+    #             if screenshot:
+    #                 take_screenshot(picture)
+    #         else:
+    #             print(coordinates)
+    #             break
+    #     return coordinates
 
     @staticmethod
     def click_on_center(coordinates):
@@ -144,7 +158,8 @@ class Main:
 
 class Search(Main):
 
-    def go_to_search(self, price):
+    @staticmethod
+    def go_to_search(price):
         # start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.transfers_selected, Pics.Tabs.transfers)))
         # start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.TransferMarket.transfers_market_selected,
         #                                                        Pics.Tabs.TransferMarket.transfers_market)))
@@ -162,14 +177,26 @@ class Search(Main):
         # start.click_right_down_corner(start.wait_for_picture(Pics.Tabs.TransferMarket.Pricing.buy_now_max),
         #                               horizontal=-50)
         # pyautogui.typewrite(price)
-        self.click_on_center(self.wait_for_picture(Pics.Tabs.TransferMarket.search_button))
-        pyautogui.moveTo(100, 200)
 
-    def wait_for_search_result(self):
-        self.wait_for_picture(Pics.Tabs.TransferMarket.back_button, 7)
+        #self.click_on_center(self.wait_for_picture(Pics.Tabs.TransferMarket.search_button))
+        pyautogui.moveTo(100, 200, 1)
 
-    def wait_for_search_result2(self):
-        self.wait_for_picture(Pics.Tabs.TransferMarket.Messages.message_no_search_results, 7)
+    @staticmethod
+    def _search_contracts():
+        print('search_contracts')
+        pass
+
+    @staticmethod
+    def wait_for_search_result():
+        result1 = Main.wait_for_picture(Pics.Test.pic1, 10)
+        if result1 is None:
+            pass
+        else:
+            print('call buy method')
+
+    @staticmethod
+    def wait_for_search_result2():
+        Main.wait_for_picture(Pics.Test.pic2, 10)
 
     @staticmethod
     def count_contracts():
@@ -184,45 +211,24 @@ class Search(Main):
 
 # webbrowser.open('https://www.easports.com/fifa/ultimate-team/web-app')
 
-
-#
-# p1 = Process(target=search_for_contract.wait_for_search_result())
-# print('@@@@@@@@@@@@@@@@@@@')
-# p2 = Process(target=search_for_contract.wait_for_search_result2())
-#
-# p1.start()
-# p2.start()
-#
-# p1.join()
-# p2.join()
-
-
-
-def func1():
-    print ('start func1')
-    for i in 'powerpowerpowerpower':
-        print('end func1')
-
-def func2():
-    print('start func2')
-
-    for i in 'powerpowerpowerpower':
-        print('end func2')
-
-if __name__=='__main__':
+if __name__ == '__main__':
+    run = 0
     w = WindowMgr()
-    w.find_window_wildcard(".*FUT Web.*")
+    w.find_window_wildcard(".*EA SPORTS.*")
     w.set_foreground()
     browser_size = w.getWindowSizes()
+    browser_size_top = w.getWindowTopSizes()
+    browser_size_bottom = w.getWindowBottomSizes()
 
-    search_for_contract = Search()
-    search_for_contract.go_to_search('300')
-    print('!!!!!!!!!!!!!!!!!')
-    search_for_contract.count_contracts()
-    procs = []
-    p1 = Process(target=search_for_contract.wait_for_search_result())
-    p2 = Process(target=search_for_contract.wait_for_search_result2())
-    p1.start()
-    p2.start()
-    p1.join()
-    p2.join()
+    time.sleep(1)
+    while True:
+        time.sleep(1)
+        search_for_contract = Search()
+        search_for_contract.go_to_search(300)
+        run += 1
+        print('Run := %i' % run)
+        p1 = Process(target=search_for_contract.wait_for_search_result)
+        p2 = Process(target=search_for_contract.wait_for_search_result2)
+        p1.start()
+        p2.start()
+

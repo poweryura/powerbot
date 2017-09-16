@@ -43,3 +43,6 @@ class Tabs(object):
         transfers_target_selected = 'transfer_target_selected.png'
 
 
+class Test(object):
+    pic1 = 'web_app.png'
+    pic2 = 'facebook.png'
