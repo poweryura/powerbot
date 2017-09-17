@@ -186,7 +186,7 @@ class Search:
 
     # @staticmethod
     def wait_for_search_result(self):
-        result1 = Main.wait_for_picture(Pics.Test.pic1, self.global_browser_size_bottom, 5, True)
+        result1 = Main.wait_for_picture(Pics.Test.pic1, self.global_browser_size, 5, True)
         if result1 is None:
             print('Exiting from search func1')
             pass
@@ -195,7 +195,7 @@ class Search:
             Test.count_contracts(self.global_browser_size)
 
     def wait_for_search_result2(self):
-        result2 = Main.wait_for_picture(Pics.Test.pic2, self.global_browser_size_bottom, 5)
+        result2 = Main.wait_for_picture(Pics.Test.pic2, self.global_browser_size, 5)
         if result2 is None:
             print('Exiting from search func2')
             pass
@@ -203,7 +203,7 @@ class Search:
             print('call buy method2')
 
     def wait_for_search_result3(self):
-        result3 = Main.wait_for_picture(Pics.Test.pic3, self.global_browser_size_bottom, 5)
+        result3 = Main.wait_for_picture(Pics.Test.pic3, self.global_browser_size, 5)
         if result3 is None:
             print('Exiting from search func3')
             pass
@@ -224,7 +224,12 @@ class Test:
         print('LIST OF PLAYERS:')
         for player in locate_players:
             print(player)
-
+    #
+    # print("NEW PARALLEL starting")
+    # search_for_contract_second = Search()
+    # p10 = Process(target=search_for_contract_second.wait_for_search_result3)
+    # p10.start()
+    # print("NEW PARALLEL ending")
 
 if __name__ == '__main__':
 
@@ -244,3 +249,5 @@ if __name__ == '__main__':
         p1.start()
         p2.start()
         p3.start()
+
+    print('DONE')
