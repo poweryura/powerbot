@@ -1,36 +1,60 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+import pdb
 import pickle
-
 import time
+
 # driver = webdriver.Firefox(executable_path=r'geckodriver.exe')
 # driver = webdriver.Chrome(executable_path=r'chromedriver.exe')
 
+options = webdriver.ChromeOptions()
+options.add_argument(r"user-data-dir=C:\Users\qadmin\AppData\Local\Google\Chrome\User Data")
+#driver = webdriver.Chrome(executable_path="chromedriver.exe", chrome_options=options)
 
-fp = webdriver.FirefoxProfile(r'C:\Users\qadmin\AppData\Roaming\Mozilla\Firefox\Profiles\0rnj92jz.default')
-driver = webdriver.Firefox(fp)
-driver.implicitly_wait(30)
+driver = webdriver.Chrome(executable_path="chromedriver.exe", chrome_options=options)
+
+# fp = webdriver.FirefoxProfile(r'C:\Users\qadmin\AppData\Roaming\Mozilla\Firefox\Profiles\0rnj92jz.default')
+# driver = webdriver.Firefox(fp)
+
+
+driver.implicitly_wait(3)
 #driver.get('https://www.easports.com/fifa/ultimate-team/web-app')
 
 driver.get("https://www.easports.com/fifa/ultimate-team/web-app/")
 
+pdb.set_trace()
 
-try:
-    content = driver.find_element_by_xpath('html/body/section/article/div/div/div[2]/div[2]/div/input')
-    content.click()
-    time.sleep(4)
-    content.send_keys('Petrovich')
-    #driver.find_element_by_class_name("btn btn-raised call-to-action").click()
-except:
-    pass
-time.sleep(30)
-try:
-    driver.find_element_by_xpath(".//*[@id='footer']/button[5]").click()
-except:
-    driver.refresh()
+# try:
+#     driver.find_element_by_xpath('html/body/section/article/div/div/div[2]/div[2]/div/input').send_keys('Petrovich')
+#     content.click()
+#     content
+#     # driver.find_element_by_class_name("btn btn-raised call-to-action").click()
+# except:
+#     pass
+#
+
+
+print("Clicking on transfers")
 driver.find_element_by_xpath(".//*[@id='footer']/button[5]").click()
-driver.find_element_by_xpath("html/body/section/article/div[2]").click()
+
+driver.find_element_by_css_selector('btnFooter.btnTransfers').click()
+
+driver.find_element_by_class_name("tile col-mobile-1-2 col-1-2 transferListTile").click()
+
+content = driver.find_elements_by_class_name("tileContent")
+content[1].click()
+
+
+
 time.sleep(2)
-driver.find_element_by_class_name("btn btn-raised section-header-btn mini call-to-action").click()
+driver.find_element_by_class_name("btn-text").click()
+
+driver.find_element_by_xpath("/html/body/section/article/div[2]").click()
+
+driver.find_element_by_xpath("/html/body/section/article/section/section[2]/div/div/div[3]/div[2]/button").click()
+driver.find_element_by_css_selector('standard.call-to-action.bidButton').click()
+driver.find_element_by_class_name("slick-slide slick-current slick-active").click()
+
 time.sleep(2)
 # def load_cookie(file1):
 #     with open(file1, 'rb') as cookie:
