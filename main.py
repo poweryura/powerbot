@@ -236,18 +236,6 @@ if __name__ == '__main__':
     # webbrowser.open('https://www.easports.com/fifa/ultimate-team/web-app')
 
     run = 0
-    for i in '1':
-        time.sleep(1)
-        search_for_contract = Search()
-        search_for_contract.go_to_search(300)
-        run += 1
-        print('Run = %i' % run)
-        p1 = Process(target=search_for_contract.wait_for_search_result)
-        p2 = Process(target=search_for_contract.wait_for_search_result2)
-        p3 = Process(target=search_for_contract.wait_for_search_result3)
-
-        p1.start()
-        p2.start()
-        p3.start()
-
+    search_for_contract = Search()
+    search_for_contract.go_to_search(300)
     print('DONE')
