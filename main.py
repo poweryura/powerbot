@@ -6,6 +6,7 @@ import sys
 # import os
 from itertools import count
 from multiprocessing import Process
+import pdb
 
 from PIL import ImageGrab
 import Pics
@@ -84,6 +85,23 @@ class WindowMgr:
         print('Browser BOTTOM size is %s ' % str(browser_size_bottom_v))
         return browser_size_bottom_v
 
+    def getWindowLeftSizes(self):
+        """Return a list of tuples (handler, (width, height)) for each real window"""
+        browser_size_top_l = win32gui.GetWindowRect(self._handle)
+        browser_size_top_l = list(browser_size_top_l)
+        browser_size_top_l[2] = int(browser_size_top_l[2] / 2)
+        browser_size_top_l = tuple(browser_size_top_l)
+        print('Browser Left size is %s ' % str(browser_size_top_l))
+        return browser_size_top_l
+
+    def getWindowRightSizes(self):
+        """Return a list of tuples (handler, (width, height)) for each real window"""
+        browser_size_right = win32gui.GetWindowRect(self._handle)
+        browser_size_right = list(browser_size_right)
+        browser_size_right[0] = int(browser_size_right[0] + int(browser_size_right[2]/2))
+        browser_size_right = tuple(browser_size_right)
+        print('Browser Right size is %s ' % str(browser_size_right))
+        return browser_size_right
 
 def timing(f):
     def wrap(*args):
@@ -104,9 +122,18 @@ def take_screenshot(prefix, global_browser_size):
 
 class Main:
 
-    @staticmethod
+    def __init__(self):
+        w = WindowMgr()
+        w.find_window_wildcard(".*EA SPORTS.*")
+        w.set_foreground()
+        self.global_browser_size = w.getWindowSizes()
+        self.global_browser_size_top = w.getWindowTopSizes()
+        self.global_browser_size_bottom = w.getWindowBottomSizes()
+        self.global_browser_size_left = w.getWindowLeftSizes()
+        self.global_browser_size_right = w.getWindowRightSizes()
+
     @timing
-    def wait_for_picture(picture, global_browser_size, wait_time=1, screenshot=False):
+    def wait_for_picture(self, picture, global_browser_size, wait_time=5, screenshot=False):
         print("Waiting for picture: %s for %s seconds" % (picture, str(wait_time)))
         coordinates = pyautogui.locateOnScreen(picture, wait_time, region=global_browser_size, grayscale=True)
         if coordinates is None:
@@ -118,21 +145,20 @@ class Main:
             print('*******Found: %s at %s *******' % (picture, coordinates))
             return coordinates
 
-    # @staticmethod
-    # @timing
-    # def wait_for_list_of_pictures(list_to_search, wait_time=1, screenshot=False):
-    #     coordinates = None
-    #     for picture in list_to_search:
-    #         print("Waiting for picture: %s for %s seconds" % (picture, str(wait_time)))
-    #         coordinates = pyautogui.locateOnScreen(picture, wait_time, region=browser_size, grayscale=True)
-    #         if coordinates is None:
-    #             print("Picture: %s not found" % picture)
-    #             if screenshot:
-    #                 take_screenshot(picture)
-    #         else:
-    #             print(coordinates)
-    #             break
-    #     return coordinates
+    @timing
+    def wait_for_list_of_pictures(self, list_to_search, global_browser_size, wait_time=5, screenshot=False):
+        coordinates = None
+        for picture in list_to_search:
+            print("Waiting for picture: %s for %s seconds" % (picture, str(wait_time)))
+            coordinates = pyautogui.locateOnScreen(picture, wait_time, region=global_browser_size, grayscale=True)
+            if coordinates is None:
+                print("!!!!!!!!!!!!!Picture: %s not found!!!!!!!!!!!!!, Searching for second picture" % picture)
+                if screenshot:
+                    take_screenshot(picture, global_browser_size)
+            else:
+                print('*******Found: %s at %s *******' % (picture, coordinates))
+                break
+        return coordinates
 
     @staticmethod
     def click_on_center(coordinates):
@@ -150,41 +176,38 @@ class Main:
         coordinates = (coordinates[0] + coordinates[2] + horizontal, coordinates[1] + coordinates[3] + vertical)
         pyautogui.click(coordinates)
 
+class Search(Main):
 
-class Search:
-    def __init__(self):
-        w = WindowMgr()
-        w.find_window_wildcard(".*EA SPORTS.*")
-        w.set_foreground()
-        self.global_browser_size = w.getWindowSizes()
-        self.global_browser_size_top = w.getWindowTopSizes()
-        self.global_browser_size_bottom = w.getWindowBottomSizes()
+    def go_to_search(self):
+        Main.click_on_center(Main.wait_for_list_of_pictures(self, (Pics.Tabs.transfers_selected, Pics.Tabs.transfers), self.global_browser_size_left, 2))
 
-    @staticmethod
-    def go_to_search(price):
-        # start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.transfers_selected, Pics.Tabs.transfers)))
-        # start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.TransferMarket.transfers_market_selected,
-        #                                                        Pics.Tabs.TransferMarket.transfers_market)))
-        # start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.TransferMarket.consumables_selected,
-        #                                                        Pics.Tabs.TransferMarket.consumables)))
-        # start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.reset_button))
-        # start.click_on_center(start.wait_for_list_of_pictures((Pics.Tabs.TransferMarket.consumables_selected,
-        #                                                        Pics.Tabs.TransferMarket.consumables)))
-        # start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.Consumables.type_player_training))
-        # start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.Consumables.type_contracts))
-        #
-        # start.click_right_down_corner(start.wait_for_picture(Pics.Tabs.TransferMarket.Consumables.Quality.quality))
-        # start.click_on_center(start.wait_for_picture(Pics.Tabs.TransferMarket.Consumables.Quality.quality_gold))
-        #
-        # start.click_right_down_corner(start.wait_for_picture(Pics.Tabs.TransferMarket.Pricing.buy_now_max),
-        #                               horizontal=-50)
-        # pyautogui.typewrite(price)
+        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.search_the_transfer_market, self.global_browser_size_top, 2))
+        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.reset_button, self.global_browser_size_bottom))
 
-        # self.click_on_center(self.wait_for_picture(Pics.Tabs.TransferMarket.search_button))
-        # pyautogui.moveTo(100, 200, 1)
+        Main.click_on_center(Main.wait_for_list_of_pictures(self, (Pics.Tabs.TransferMarket.consumables_selected, Pics.Tabs.TransferMarket.consumables), self.global_browser_size_top, 3, True))
+        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Consumables.type_player_training_big, self.global_browser_size_top, 3))
+        #Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Consumables.type_player_training, self.global_browser_size, 5))
+        pyautogui.moveRel(80, 80, duration=0.1)
+        pyautogui.scroll(-500)
+
+        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Consumables.type_contracts, self.global_browser_size_top))
+        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Consumables.Quality.quality, self.global_browser_size_top))
+        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Consumables.Quality.quality_gold, self.global_browser_size))
+
+        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Pricing.bid_price, self.global_browser_size))
+        pyautogui.typewrite(['tab'], interval=0.1)
+        pyautogui.typewrite(['tab'], interval=0.1)
+        pyautogui.typewrite(['tab'], interval=0.1)
+        pyautogui.typewrite('200', interval=0.1)
+
+        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.search_button, self.global_browser_size))
+
+        Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Consumables.Contracts.make_bid, self.global_browser_size_top)
+
+        Test.count_contracts(self.global_browser_size)
+        pdb.set_trace()
         print('doing SEARCH')
 
-    # @staticmethod
     def wait_for_search_result(self):
         result1 = Main.wait_for_picture(Pics.Test.pic1, self.global_browser_size, 5, True)
         if result1 is None:
@@ -210,32 +233,32 @@ class Search:
         else:
             print('call buy method3')
 
+# locate_players = pyautogui.locateAllOnScreen(Pics.Tabs.TransferMarket.Consumables.Contracts.contract_player_small, region=(0, 0, 999, 1400), grayscale=True)
+# print(len(list(locate_players)))
 
 class Test:
     @staticmethod
     def count_contracts(global_browser_size):
         print('SIZE for searching contracts: %s' % str(global_browser_size))
-        print('Counting contracts:')
-        print(global_browser_size)
-        locate_players = pyautogui.locateAllOnScreen(
-            Pics.Tabs.TransferMarket.Consumables.Contracts.contract_player_small,
-            region=global_browser_size, grayscale=True)
-        # print(len(list(locate_players)))
+        locate_players = pyautogui.locateAllOnScreen(Pics.Tabs.TransferMarket.Consumables.Contracts.contract_player_small, region=global_browser_size, grayscale=True)
+        #print(len(list(locate_players)))
         print('LIST OF PLAYERS:')
         for player in locate_players:
             print(player)
-    #
-    # print("NEW PARALLEL starting")
+          # print("NEW PARALLEL starting")
     # search_for_contract_second = Search()
     # p10 = Process(target=search_for_contract_second.wait_for_search_result3)
     # p10.start()
     # print("NEW PARALLEL ending")
+
 
 if __name__ == '__main__':
 
     # webbrowser.open('https://www.easports.com/fifa/ultimate-team/web-app')
 
     run = 0
+
     search_for_contract = Search()
-    search_for_contract.go_to_search(300)
+    search_for_contract.go_to_search()
+
     print('DONE')

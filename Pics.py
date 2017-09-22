@@ -7,17 +7,21 @@ class Tabs(object):
     transfers_selected = 'transfers_tab_selected.png'
     
     class TransferMarket(object):
-        transfers_market = 'transfer_market.png'
+        search_the_transfer_market = 'search_the_transfer_market.png'
         transfers_market_selected = 'transfer_market_selected.png'
         
         consumables = 'consumables_tab.png'
         consumables_selected = 'consumables_tab_selected.png'
         
         reset_button = 'reset_button.png'
-        search_button = 'search_button.png'
+        search_button = 'search_button.bmp'
         back_button = 'back_button.png'
+        clear_sold = 'clear_sold.png'
+        relist_all = 'relist_all.png'
+        send_all_to_club = 'send_all_to_club.png'
 
         class Consumables(object):
+            type_player_training_big = 'type_player_training_big.bmp'
             type_player_training = 'type_player_training.png'
             type_contracts = 'type_contracts.png'
 
@@ -28,8 +32,10 @@ class Tabs(object):
             class Contracts(object):
                 contract_player_full = 'contract_player_full.png'
                 contract_player_small = 'contract_player_small.png'
-
+                contract_player_text = 'contract_player_text.bmp'
+                make_bid = 'make_bid.png'
         class Pricing(object):
+            bid_price = 'bid_price.bmp'
             min_price = 'min_price.png'
             max_price = 'max_price.png'
             buy_now_min = 'buy_now_min.png'

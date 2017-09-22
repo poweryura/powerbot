@@ -34,10 +34,19 @@ pdb.set_trace()
 #
 
 
-print("Clicking on transfers")
+# Transfers
 driver.find_element_by_xpath(".//*[@id='footer']/button[5]").click()
 
+# Transfer List
+driver.find_element_by_xpath("/html/body/section/article/div[2]").click()
+
+# Consumables
+driver.find_element_by_xpath("/html/body/section/article/div[1]/div[1]/div/a[4]").click()
+
+
+driver.find_element_by_xpath("/html/body/section/article/div[1]/div[2]/div/div[2]/div[1]/div[3]/div/ul/li[6]").click()
 driver.find_element_by_css_selector('btnFooter.btnTransfers').click()
+
 
 driver.find_element_by_class_name("tile col-mobile-1-2 col-1-2 transferListTile").click()
 
