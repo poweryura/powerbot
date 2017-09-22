@@ -34,6 +34,8 @@ class Tabs(object):
                 contract_player_small = 'contract_player_small.png'
                 contract_player_text = 'contract_player_text.bmp'
                 make_bid = 'make_bid.png'
+                watch = 'watch.png'
+
         class Pricing(object):
             bid_price = 'bid_price.bmp'
             min_price = 'min_price.png'

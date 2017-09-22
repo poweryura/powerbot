@@ -176,6 +176,30 @@ class Main:
         coordinates = (coordinates[0] + coordinates[2] + horizontal, coordinates[1] + coordinates[3] + vertical)
         pyautogui.click(coordinates)
 
+    @staticmethod
+    @timing
+    def count_contracts(global_browser_size):
+        print('SIZE for searching contracts: %s' % str(global_browser_size))
+        locate_players = pyautogui.locateAllOnScreen(Pics.Tabs.TransferMarket.Consumables.Contracts.contract_player_small, region=global_browser_size, grayscale=True)
+        print('Found the next items: %s ' % str(list(locate_players)))
+        time.sleep(3)
+        #print(locate_players[-1])
+        #Main.click_on_center(locate_players[-1])
+        #print('LIST OF PLAYERS:')
+        counter = 0
+        for player in locate_players:
+            counter = + 1
+            print(counter)
+
+
+            print("Found")
+        pyautogui.scroll(-1000)
+          # print("NEW PARALLEL starting")
+    # search_for_contract_second = Search()
+    # p10 = Process(target=search_for_contract_second.wait_for_search_result3)
+    # p10.start()
+    # print("NEW PARALLEL ending")
+
 class Search(Main):
 
     def go_to_search(self):
@@ -184,7 +208,7 @@ class Search(Main):
         Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.search_the_transfer_market, self.global_browser_size_top, 2))
         Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.reset_button, self.global_browser_size_bottom))
 
-        Main.click_on_center(Main.wait_for_list_of_pictures(self, (Pics.Tabs.TransferMarket.consumables_selected, Pics.Tabs.TransferMarket.consumables), self.global_browser_size_top, 3, True))
+        Main.click_on_center(Main.wait_for_list_of_pictures(self, (Pics.Tabs.TransferMarket.consumables_selected, Pics.Tabs.TransferMarket.consumables), self.global_browser_size_top, 3))
         Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Consumables.type_player_training_big, self.global_browser_size_top, 3))
         #Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Consumables.type_player_training, self.global_browser_size, 5))
         pyautogui.moveRel(80, 80, duration=0.1)
@@ -202,63 +226,24 @@ class Search(Main):
 
         Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.search_button, self.global_browser_size))
 
-        Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Consumables.Contracts.make_bid, self.global_browser_size_top)
+        Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Consumables.Contracts.watch, self.global_browser_size_top)
 
-        Test.count_contracts(self.global_browser_size)
-        pdb.set_trace()
+        self.count_contracts(self.global_browser_size)
+        #pdb.set_trace()
         print('doing SEARCH')
 
-    def wait_for_search_result(self):
-        result1 = Main.wait_for_picture(Pics.Test.pic1, self.global_browser_size, 5, True)
-        if result1 is None:
-            print('Exiting from search func1')
-            pass
-        else:
-            print('call buy method')
-            Test.count_contracts(self.global_browser_size)
-
-    def wait_for_search_result2(self):
-        result2 = Main.wait_for_picture(Pics.Test.pic2, self.global_browser_size, 5)
-        if result2 is None:
-            print('Exiting from search func2')
-            pass
-        else:
-            print('call buy method2')
-
-    def wait_for_search_result3(self):
-        result3 = Main.wait_for_picture(Pics.Test.pic3, self.global_browser_size, 5)
-        if result3 is None:
-            print('Exiting from search func3')
-            pass
-        else:
-            print('call buy method3')
 
 # locate_players = pyautogui.locateAllOnScreen(Pics.Tabs.TransferMarket.Consumables.Contracts.contract_player_small, region=(0, 0, 999, 1400), grayscale=True)
 # print(len(list(locate_players)))
-
-class Test:
-    @staticmethod
-    def count_contracts(global_browser_size):
-        print('SIZE for searching contracts: %s' % str(global_browser_size))
-        locate_players = pyautogui.locateAllOnScreen(Pics.Tabs.TransferMarket.Consumables.Contracts.contract_player_small, region=global_browser_size, grayscale=True)
-        #print(len(list(locate_players)))
-        print('LIST OF PLAYERS:')
-        for player in locate_players:
-            print(player)
-          # print("NEW PARALLEL starting")
-    # search_for_contract_second = Search()
-    # p10 = Process(target=search_for_contract_second.wait_for_search_result3)
-    # p10.start()
-    # print("NEW PARALLEL ending")
-
 
 if __name__ == '__main__':
 
     # webbrowser.open('https://www.easports.com/fifa/ultimate-team/web-app')
 
     run = 0
-
-    search_for_contract = Search()
-    search_for_contract.go_to_search()
-
-    print('DONE')
+    while True:
+        run = run + 1
+        print(run)
+        search_for_contract = Search()
+        search_for_contract.go_to_search()
+        print('DONE')
