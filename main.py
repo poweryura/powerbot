@@ -15,7 +15,7 @@ import pyautogui
 # from pywinauto.application import Application
 import win32gui
 import re
-
+from random import randint
 
 # def get_config_file(file):
 #     f = open(file)
@@ -247,3 +247,4 @@ if __name__ == '__main__':
         search_for_contract = Search()
         search_for_contract.go_to_search()
         print('DONE')
+        time.sleep(randint(0, 9))
