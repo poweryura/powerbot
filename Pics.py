@@ -5,7 +5,10 @@ class Home(object):
 class Tabs(object):
     transfers = 'transfers_tab.png'
     transfers_selected = 'transfers_tab_selected.png'
-    
+
+    class Transfer_list(object):
+        transfer_list = 'transfer_list.png'
+
     class TransferMarket(object):
         search_the_transfer_market = 'search_the_transfer_market.png'
         transfers_market_selected = 'transfer_market_selected.png'
@@ -13,15 +16,16 @@ class Tabs(object):
         consumables = 'consumables_tab.png'
         consumables_selected = 'consumables_tab_selected.png'
         
-        reset_button = 'reset_button.png'
+        reset_button = 'reset_buttonH.png'
         search_button = 'search_button.png'
         back_button = 'back_button.png'
         clear_sold = 'clear_sold.png'
         relist_all = 'relist_all.png'
         send_all_to_club = 'send_all_to_club.png'
+        nextarrow = 'nextarrow.png'
 
         class Consumables(object):
-            type_player_training_big = 'type_player_training_big.bmp'
+            type_player_training_big = 'type_player_training_big.png'
             type_player_training = 'type_player_training.png'
             type_contracts = 'type_contracts.png'
 
@@ -31,13 +35,16 @@ class Tabs(object):
 
             class Contracts(object):
                 contract_player_full = 'contract_player_full.png'
-                contract_player_small = 'contract_player_small.png'
-                contract_player_text = 'contract_player_text.bmp'
+                contract_player_gold_small = 'contract_player_gold_small.png'
+                contract_player_gold_RARE_small = 'contract_player_gold_RARE_small.png'
+                contract_player_gold_RARE_big = 'contract_player_gold_RARE_big.png'
+                contract_player_text = 'contract_player_text.png'
+
                 make_bid = 'make_bid.png'
                 watch = 'watch.png'
 
         class Pricing(object):
-            bid_price = 'bid_price1.png'
+            bid_price = 'bid_price.png'
             min_price = 'min_price.png'
             max_price = 'max_price.png'
             buy_now_min = 'buy_now_min.png'
@@ -46,13 +53,21 @@ class Tabs(object):
         class Messages(object):
             message_no_search_results = 'message_no_search_results.png'
 
-    class TransferTargets(object):
-        transfers_target = 'transfer_target.png'
-        transfers_target_selected = 'transfer_target_selected.png'
+    class Club(object):
+        club_selected = 'club_selected.png'
+        club = 'club.png'
+        club_consumables = 'club_consumables.png'
+
+        class Consumables(object):
+            cons_contracts = 'cons_contracts.png'
+
+            class Contracts(object):
+                contract_player_gold_RARE_small = 'contract_player_gold_RARE_small.png'
+                contract_player_gold_RARE_big = 'contract_player_gold_RARE_big.png'
 
 
-class Test(object):
-    pic1 = 'instagram.png'
-    pic2 = 'youtube.png'
-    pic3 = 'twitter.png'
-    pic4 = 'lot.png'
+class Actions(object):
+    list_on_transfer_market = 'list_on_transfer_market.png'
+    list_item = 'list_item.png'
+    buy_now = 'buy_now.png'
+    send_to_my_club = 'send_to_my_club.png'
