@@ -16,7 +16,7 @@ class Tabs(object):
         consumables = 'consumables_tab.png'
         consumables_selected = 'consumables_tab_selected.png'
         
-        reset_button = 'reset_buttonH.png'
+        reset_button = 'reset_button.png'
         search_button = 'search_button.png'
         back_button = 'back_button.png'
         clear_sold = 'clear_sold.png'
@@ -60,6 +60,8 @@ class Tabs(object):
 
         class Consumables(object):
             cons_contracts = 'cons_contracts.png'
+            cons_contracts_on = 'cons_contracts_on.png'
+
 
             class Contracts(object):
                 contract_player_gold_RARE_small = 'contract_player_gold_RARE_small.png'
@@ -71,3 +73,8 @@ class Actions(object):
     list_item = 'list_item.png'
     buy_now = 'buy_now.png'
     send_to_my_club = 'send_to_my_club.png'
+
+
+class Messages(object):
+    transfer_list_is_full = 'transfer_list_is_full.png'
+    warning_message = 'warning_message.png'

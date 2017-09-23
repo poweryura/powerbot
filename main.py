@@ -258,6 +258,7 @@ class Sell(Main):
     def go_to_consumables(self):
         Main.click_on_center(Main.wait_for_list_of_pictures(self, (Pics.Tabs.Club.club, Pics.Tabs.Club.club_selected), self.global_browser_size, 2))
         Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.Club.club_consumables, self.global_browser_size))
+        #pdb.set_trace()
         Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.Club.Consumables.cons_contracts, self.global_browser_size))
         Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.Club.Consumables.Contracts.contract_player_gold_RARE_small, self.global_browser_size))
 
@@ -269,14 +270,16 @@ class Sell(Main):
             print(sell_count)
             Main.click_on_center(Main.wait_for_picture(self, Pics.Actions.list_on_transfer_market, self.global_browser_size))
             #str(pyautogui.locateOnScreen(Pics.Tabs.Club.Consumables.Contracts.contract_player_gold_RARE_small))
-            pyautogui.typewrite(['tab'], interval=0.1)
+            pyautogui.typewrite(['tab'], interval=1)
             pyautogui.typewrite('350', interval=0.1)
             pyautogui.typewrite(['tab'], interval=0.1)
             pyautogui.typewrite(['tab'], interval=0.1)
             pyautogui.typewrite(['tab'], interval=0.1)
             pyautogui.typewrite('400', interval=0.1)
             Main.click_on_center(Main.wait_for_picture(self, Pics.Actions.list_item, self.global_browser_size))
-
+            if Main.wait_for_picture(self, Pics.Messages.warning_message, self.global_browser_size,1):
+                pyautogui.typewrite(['enter'], interval=0.1)
+                break
 
 
 # locate_players = pyautogui.locateAllOnScreen(Pics.Tabs.TransferMarket.Consumables.Contracts.contract_player_small, region=(0, 0, 999, 1400), grayscale=True)

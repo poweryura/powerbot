@@ -2,24 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="693e2979-efb4-43b1-ab16-1ddb7e81018a" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/powerbot_new.iml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/2017-09-20_20-46-26_instagram.png_.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bid_price.PNG" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bid_price.bmp" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/consumables_tab.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/consumables_tab_selected.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/contract_player_small.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/contract_player_text.bmp" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/search_button.PNG" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/search_button.bmp" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/type_player_training_big.bmp" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/clear_sold.png" afterPath="$PROJECT_DIR$/clear_sold.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/consumables_tab.png" afterPath="$PROJECT_DIR$/consumables_tab.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/consumables_tab_selected.png" afterPath="$PROJECT_DIR$/consumables_tab_selected.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/relist_all.png" afterPath="$PROJECT_DIR$/relist_all.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/type_player_training_big.png" afterPath="$PROJECT_DIR$/type_player_training_big.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cons_contracts.png" afterPath="$PROJECT_DIR$/cons_contracts.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/reset_button.png" afterPath="$PROJECT_DIR$/reset_button.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Pics.py" afterPath="$PROJECT_DIR$/Pics.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
     </list>
@@ -37,8 +21,8 @@
           <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/main.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1314">
-                  <caret line="298" column="17" lean-forward="true" selection-start-line="298" selection-start-column="17" selection-end-line="298" selection-end-column="17" />
+                <state relative-caret-position="602">
+                  <caret line="280" column="60" lean-forward="true" selection-start-line="280" selection-start-column="60" selection-end-line="280" selection-end-column="60" />
                   <folding>
                     <element signature="e#0#15#0" expanded="true" />
                   </folding>
@@ -73,11 +57,11 @@
           <file leaf-file-name="Pics.py" pinned="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Pics.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="546">
-                  <caret line="65" column="16" lean-forward="false" selection-start-line="65" selection-start-column="16" selection-end-line="65" selection-end-column="16" />
+                <state relative-caret-position="738">
+                  <caret line="79" column="19" lean-forward="false" selection-start-line="79" selection-start-column="4" selection-end-line="79" selection-end-column="19" />
                   <folding>
-                    <element signature="e#1710#1905#0" expanded="false" />
-                    <element signature="e#2481#2640#0" expanded="false" />
+                    <element signature="e#1709#1904#0" expanded="false" />
+                    <element signature="e#2537#2696#0" expanded="false" />
                   </folding>
                 </state>
               </provider>
@@ -90,6 +74,8 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>None</find>
+      <find>cons_contracts</find>
+      <find>reset_</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -104,8 +90,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1080" />
-    <option name="width" value="2360" />
+    <option name="x" value="1085" />
+    <option name="width" value="2355" />
     <option name="height" value="1400" />
   </component>
   <component name="ProjectLevelVcsManager">
@@ -194,12 +180,13 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1080" y="0" width="2360" height="1400" extended-state="0" />
+    <frame x="1085" y="0" width="2355" height="1400" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.10695652" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.0788671" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32964426" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32964426" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32964426" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -212,7 +199,6 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -243,19 +229,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Pics.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="546">
-          <caret line="65" column="16" lean-forward="false" selection-start-line="65" selection-start-column="16" selection-end-line="65" selection-end-column="16" />
+        <state relative-caret-position="738">
+          <caret line="79" column="19" lean-forward="false" selection-start-line="79" selection-start-column="4" selection-end-line="79" selection-end-column="19" />
           <folding>
-            <element signature="e#1710#1905#0" expanded="false" />
-            <element signature="e#2481#2640#0" expanded="false" />
+            <element signature="e#1709#1904#0" expanded="false" />
+            <element signature="e#2537#2696#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1314">
-          <caret line="298" column="17" lean-forward="true" selection-start-line="298" selection-start-column="17" selection-end-line="298" selection-end-column="17" />
+        <state relative-caret-position="602">
+          <caret line="280" column="60" lean-forward="true" selection-start-line="280" selection-start-column="60" selection-end-line="280" selection-end-column="60" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
