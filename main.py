@@ -211,12 +211,13 @@ class Search(Main):
         Main.click_on_center(Main.wait_for_list_of_pictures(self, (Pics.Tabs.TransferMarket.consumables_selected, Pics.Tabs.TransferMarket.consumables), self.global_browser_size_top, 3))
         Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Consumables.type_player_training_big, self.global_browser_size_top, 3))
         #Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Consumables.type_player_training, self.global_browser_size, 5))
-        pyautogui.moveRel(80, 80, duration=0.1)
-        pyautogui.scroll(-500)
-
-        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Consumables.type_contracts, self.global_browser_size_top))
-        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Consumables.Quality.quality, self.global_browser_size_top))
+        pyautogui.moveRel(80, 80, duration=0.3)
+        pyautogui.scroll(-100)
+        #pdb.set_trace()
+        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Consumables.type_contracts, self.global_browser_size))
+        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Consumables.Quality.quality, self.global_browser_size))
         Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Consumables.Quality.quality_gold, self.global_browser_size))
+        pyautogui.moveRel(-200, -200, duration=0.1)
 
         Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Pricing.bid_price, self.global_browser_size))
         pyautogui.typewrite(['tab'], interval=0.1)

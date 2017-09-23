@@ -14,7 +14,7 @@ class Tabs(object):
         consumables_selected = 'consumables_tab_selected.png'
         
         reset_button = 'reset_button.png'
-        search_button = 'search_button.bmp'
+        search_button = 'search_button.png'
         back_button = 'back_button.png'
         clear_sold = 'clear_sold.png'
         relist_all = 'relist_all.png'
@@ -37,7 +37,7 @@ class Tabs(object):
                 watch = 'watch.png'
 
         class Pricing(object):
-            bid_price = 'bid_price.bmp'
+            bid_price = 'bid_price1.png'
             min_price = 'min_price.png'
             max_price = 'max_price.png'
             buy_now_min = 'buy_now_min.png'
