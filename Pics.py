@@ -1,7 +1,3 @@
-class Home(object):
-    twitter = 'twitter.png'
-
-
 class Tabs(object):
     transfers = 'transfers_tab.png'
     transfers_selected = 'transfers_tab_selected.png'
@@ -24,6 +20,8 @@ class Tabs(object):
         send_all_to_club = 'send_all_to_club.png'
         nextarrow = 'nextarrow.png'
 
+        watch = 'watch.png'
+
         class Consumables(object):
             type_player_training_big = 'type_player_training_big.png'
             type_player_training = 'type_player_training.png'
@@ -32,16 +30,9 @@ class Tabs(object):
             class Quality(object):
                 quality = 'quality.png'
                 quality_gold = 'quality_gold.png'
-
-            class Contracts(object):
-                contract_player_full = 'contract_player_full.png'
-                contract_player_gold_small = 'contract_player_gold_small.png'
-                contract_player_gold_RARE_small = 'contract_player_gold_RARE_small.png'
-                contract_player_gold_RARE_big = 'contract_player_gold_RARE_big.png'
                 contract_player_text = 'contract_player_text.png'
-
                 make_bid = 'make_bid.png'
-                watch = 'watch.png'
+
 
         class Pricing(object):
             bid_price = 'bid_price.png'
@@ -61,12 +52,6 @@ class Tabs(object):
         class Consumables(object):
             cons_contracts = 'cons_contracts.png'
             cons_contracts_on = 'cons_contracts_on.png'
-
-
-            class Contracts(object):
-                contract_player_gold_RARE_small = 'contract_player_gold_RARE_small.png'
-                contract_player_gold_RARE_big = 'contract_player_gold_RARE_big.png'
-
 
 class Actions(object):
     list_on_transfer_market = 'list_on_transfer_market.png'

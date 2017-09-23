@@ -1,0 +1,17 @@
+Contracts:
+  Gold:
+    contract_player_full: 'contract_player_gold_big.png'
+    contract_player_small: 'contract_player_gold_small.png'
+    sell_min_price: '200'
+    sell_max_price: '250'
+    bid_min_price: '150'
+    buy_max_price: '200'
+
+
+  Rare:
+    contract_player_full: 'contract_player_gold_RARE_big.png'
+    contract_player_small: 'contract_player_gold_RARE_small.png'
+    sell_min_price: '300'
+    sell_max_price: '350'
+    bid_min_price: '200'
+    buy_max_price: '250'
