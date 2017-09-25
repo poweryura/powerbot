@@ -2,8 +2,12 @@ import datetime
 import time
 import yaml
 import sys
-# import webbrowser
-# import os
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import os
 from itertools import count
 from multiprocessing import Process
 import pdb
@@ -18,6 +22,7 @@ import re
 from random import randint
 import smtplib
 import random
+import locators as el
 
 
 # connect to another process spawned by explorer.exe
@@ -69,12 +74,12 @@ class Service(object):
         return wrap
 
     @staticmethod
-    def get_config_file(file):
+    def load_config_file(file):
         f = open(file)
         Picsy = yaml.safe_load(f)
+        print('config file %s loaded' % file)
         f.close()
         return Picsy
-
 
 
 
@@ -102,7 +107,7 @@ class WindowMgr:
         """put the window in the foreground"""
 
         if self._handle is None:
-            raise Exception("Windows handle not found, Please make sure that Mozilla FUT page is opened")
+            raise Exception("Windows handle not found, Please make sure that FUT page is opened")
         win32gui.SetForegroundWindow(self._handle)
 
     def getWindowSizes(self):
@@ -151,6 +156,17 @@ class WindowMgr:
 class Main:
 
     def __init__(self):
+        options = webdriver.ChromeOptions()
+        options.add_argument(r"user-data-dir=C:\Users\qadmin\AppData\Local\Google\Chrome\User Data")
+        self.driver = webdriver.Chrome(executable_path="chromedriver.exe", chrome_options=options)
+        self.driver.implicitly_wait(10)
+        try:
+            Main.wait_for_element_click(self, el.Buttons.MainLogin_FUT, 10)
+        except:
+            print('Looks logged in')
+
+        WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.XPATH, ".//*[@id='footer']/button[5]")))
+
         w = WindowMgr()
         w.find_window_wildcard(".*EA SPORTS.*")
         w.set_foreground()
@@ -159,6 +175,9 @@ class Main:
         self.global_browser_size_bottom = w.getWindowBottomSizes()
         self.global_browser_size_left = w.getWindowLeftSizes()
         self.global_browser_size_right = w.getWindowRightSizes()
+        if Main.wait_for_picture(self, Pics.Tabs.TransferMarket.ok, self.global_browser_size, 1) is not None:
+            Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.ok, self.global_browser_size))
+
 
     @Service.timing
     def wait_for_picture(self, picture, global_browser_size, wait_time=5, screenshot=False):
@@ -188,6 +207,12 @@ class Main:
                 break
         return coordinates
 
+    def wait_for_element_click(self, element, time=5,):
+        WebDriverWait(self.driver, time).until(EC.element_to_be_clickable(element)).click()
+
+    def wait_for_element(self, element, time=5,):
+        WebDriverWait(self.driver, time).until(EC.element_to_be_clickable(element))
+
     @staticmethod
     def click_on_center(coordinates):
         if coordinates is False:
@@ -206,66 +231,86 @@ class Main:
 
     @Service.timing
     def buy_contracts(self, global_browser_size, contract_type):
-        # pdb.set_trace()
-        Main.wait_for_picture(self, Pics.Tabs.TransferMarket.watch, self.global_browser_size_top)
+
+        #Main.wait_for_picture(self, Pics.Tabs.TransferMarket.search_results, self.global_browser_size_top)
+        try:
+            Main.wait_for_element(self, el.Buttons.Watch)
+            Main.wait_for_element_click(self, el.Buttons.Next)
+        except:
+            print("Nothing found in search query")
+            return
+        counter = 0
+        print('Something found, doing shopping')
+        pdb.set_trace()
 
         while Main.wait_for_picture(self, Pics.Tabs.TransferMarket.nextarrow, self.global_browser_size_top, 3):
-            counter = 0
             counter = counter + 1
-            Main.wait_for_picture(self, Pics.Tabs.TransferMarket.watch, self.global_browser_size_top)
+            Main.wait_for_picture(self, Pics.Tabs.TransferMarket.search_results, self.global_browser_size_top)
             if str(list(pyautogui.locateAllOnScreen(Picsy['Contracts'][contract_type]['contract_player_small'], region=global_browser_size, grayscale=True))) == '[]':
                 print('No contract found')
                 if Main.wait_for_picture(self, Pics.Tabs.TransferMarket.nextarrow, self.global_browser_size_top, 1):
                     print('Clicking on next page: %s' % str(counter))
                     Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.nextarrow, self.global_browser_size_top, 1))
             else:
+                player_counter = 0
                 for player in pyautogui.locateAllOnScreen(Picsy['Contracts'][contract_type]['contract_player_small'], region=global_browser_size, grayscale=True):
-                    print(counter)
-                    print(player)
+                    player_counter = player_counter + 1
+                    print('Clicking on contract %s ' % player_counter)
                     Main.click_on_center(player)
-                    if Main.wait_for_picture(self, Picsy['Contracts'][contract_type]['contract_player_full'], self.global_browser_size_right) is True:
-                        Main.click_on_center(Main.wait_for_picture(self, Pics.Actions.buy_now, self.global_browser_size, 2))
+                    if Main.wait_for_picture(self, Picsy['Contracts'][contract_type]['contract_player_full'], self.global_browser_size_right, 2) is not False:
+                        print('Clicking buy')
+                        Main.click_on_center(Main.wait_for_picture(self, Pics.Actions.buy_now, self.global_browser_size))
                         pyautogui.typewrite(['enter'], interval=0.1)
-                        Main.click_on_center(Main.wait_for_picture(self, Pics.Actions.send_to_my_club, self.global_browser_size_right, 1))
+                        Main.click_on_center(Main.wait_for_picture(self, Pics.Actions.send_to_my_club, self.global_browser_size_right, 3))
+                Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.nextarrow, self.global_browser_size_top, 2))
 
 
 class Search(Main):
 
-    def go_to_search(self, contract_type):
+    def search_contracts(self, contract_type):
 
-        Main.click_on_center(Main.wait_for_list_of_pictures(self, (Pics.Tabs.transfers_selected, Pics.Tabs.transfers), self.global_browser_size_left, 2))
+        Main.wait_for_element_click(self, el.Tabs.Transfers)
+        Main.wait_for_element_click(self, el.Tabs.TransfersIn.Search_Transfer_market)
+        Main.wait_for_element_click(self, el.Tabs.TransfersIn.SearchTransferMarket.Consumables)
+        Main.wait_for_element_click(self, el.Buttons.Reset)
 
-        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.search_the_transfer_market, self.global_browser_size_top, 2))
-        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.reset_button, self.global_browser_size_bottom))
-        Main.click_on_center(Main.wait_for_list_of_pictures(self, (Pics.Tabs.TransferMarket.consumables_selected, Pics.Tabs.TransferMarket.consumables), self.global_browser_size_top, 3))
-        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Consumables.type_player_training_big, self.global_browser_size_top, 3))
-        pyautogui.moveRel(80, 80, duration=0.3)
-        pyautogui.scroll(-100)
-        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Consumables.type_contracts, self.global_browser_size))
-        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Consumables.Quality.quality, self.global_browser_size))
-        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.Consumables.Quality.quality_gold, self.global_browser_size))
-
-        pyautogui.moveRel(-200, -200, duration=0.1)
-        pyautogui.typewrite(['tab'], interval=0.1)
+        Main.wait_for_element_click(self, (By.XPATH, "/html/body/section/article/div[1]/div[2]/div/div[2]/div[1]/div[3]/div/div/img"))
+        Main.wait_for_element_click(self, (By.XPATH, "/html/body/section/article/div[1]/div[2]/div/div[2]/div[1]/div[3]/div/ul/li[6]"))
+        Main.wait_for_element_click(self, (By.XPATH, "/html/body/section/article/div[1]/div[2]/div/div[2]/div[1]/div[4]/div/div/img"))
+        Main.wait_for_element_click(self, (By.XPATH, "/html/body/section/article/div[1]/div[2]/div/div[2]/div[1]/div[4]/div/ul/li[4]"))
+        Main.wait_for_element_click(self, (By.XPATH, "/html/body/section/article/div[1]/div[2]/div/div[2]/div[2]/div[2]/input"))
+        time.sleep(0.2)
         pyautogui.typewrite(Picsy['Contracts'][contract_type]['bid_min_price'], interval=0.1)
-        pyautogui.typewrite(['tab'], interval=0.1)
-        pyautogui.typewrite(['tab'], interval=0.1)
-        pyautogui.typewrite(['tab'], interval=0.1)
-        pyautogui.typewrite(Picsy['Contracts'][contract_type]['buy_max_price'], interval=0.1)
+        pyautogui.typewrite(['tab'])
+        pyautogui.typewrite(['tab'])
+        pyautogui.typewrite(['tab'])
+        pyautogui.typewrite(Picsy['Contracts'][contract_type]['buy_max_price'])
 
-        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.search_button, self.global_browser_size))
+
+
+        Main.wait_for_element_click(self, el.Buttons.Search)
+        Main.wait_for_element(self, el.Buttons.Watch)
+
         Main.wait_for_picture(self, Pics.Tabs.TransferMarket.watch, self.global_browser_size_top)
 
         self.buy_contracts(self.global_browser_size_left, contract_type)
 
     def relist_and_clear_sold(self):
-        Main.click_on_center(Main.wait_for_list_of_pictures(self, (Pics.Tabs.transfers_selected, Pics.Tabs.transfers), self.global_browser_size_left, 2))
-        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.Transfer_list.transfer_list, self.global_browser_size))
-        if Main.wait_for_picture(self, Pics.Tabs.TransferMarket.clear_sold, self.global_browser_size_top, 2):
-            Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.clear_sold, self.global_browser_size_top, 1))
-        if Main.wait_for_picture(self, Pics.Tabs.TransferMarket.relist_all, self.global_browser_size_top, 2):
-            Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.relist_all, self.global_browser_size_top, 1))
-            pyautogui.typewrite(['enter'], interval=0.1)
+
+        Main.wait_for_element_click(self, el.Tabs.Transfers)
+        Main.wait_for_element_click(self, el.Tabs.TransfersIn.Transfer_List)
+        print("Trying to re-list")
+        try:
+            Main.wait_for_element_click(self, el.Buttons.Re_listAll, 5)
+            Main.wait_for_element_click(self, el.Buttons.Yes, 5)
+        except:
+            print('Nothing to relist')
+
+        print("Trying to clear sold")
+        try:
+            Main.wait_for_element_click(self, el.Buttons.Clear_Sold, 5)
+        except:
+            print('Nothing to Clear')
 
 
 class Sell(Main):
@@ -286,7 +331,6 @@ class Sell(Main):
             sell_count = sell_count + 1
             print(sell_count)
             Main.click_on_center(Main.wait_for_picture(self, Pics.Actions.list_on_transfer_market, self.global_browser_size))
-            #str(pyautogui.locateOnScreen(Pics.Tabs.Club.Consumables.Contracts.contract_player_gold_RARE_small))
             pyautogui.typewrite(['tab'], interval=1)
             pyautogui.typewrite(Picsy['Contracts'][contract_type]['sell_min_price'], interval=0.1)
             pyautogui.typewrite(['tab'], interval=0.1)
@@ -294,7 +338,7 @@ class Sell(Main):
             pyautogui.typewrite(['tab'], interval=0.1)
             pyautogui.typewrite(Picsy['Contracts'][contract_type]['sell_max_price'], interval=0.1)
             Main.click_on_center(Main.wait_for_picture(self, Pics.Actions.list_item, self.global_browser_size))
-            if Main.wait_for_picture(self, Pics.Messages.warning_message, self.global_browser_size,1):
+            if Main.wait_for_picture(self, Pics.Messages.warning_message, self.global_browser_size, 1):
                 pyautogui.typewrite(['enter'], interval=0.1)
                 break
 
@@ -304,43 +348,51 @@ if __name__ == '__main__':
     # webbrowser.open('https://www.easports.com/fifa/ultimate-team/web-app')
     run = 0
 
-    Picsy = Service.get_config_file('Pics.yaml')
+    Picsy = Service.load_config_file('Pics.yaml')
 
-    # search_for_contract = Search()
-    # search_for_contract.go_to_search('Gold')
+    # options = webdriver.ChromeOptions()
+    # options.add_argument(r"user-data-dir=C:\Users\qadmin\AppData\Local\Google\Chrome\User Data")
+    # driver = webdriver.Chrome(executable_path="chromedriver.exe", chrome_options=options)
+    # driver.implicitly_wait(10)
+    # WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, ".//*[@id='footer']/button[5]")))
+
+    #
+    search_for_contract = Search()
+    #search_for_contract.search_contracts('Rare')
+
+    search_for_contract.relist_and_clear_sold()
     #
     # sell_contracts = Sell()
     # sell_contracts.go_to_consumables('Gold')
     # sell_contracts.sell_item('Gold')
 
+    sys.exit()
 while True:
     global first_hour
 
     run = run + 1
-    print('Iteration: %s' % str(run))
-    sell_contracts = Sell()
-    contract = random.choice(['Rare', 'Gold'])
+    print('Iteration to search items : %s' % str(run))
+
+    contract = random.choice(['Rare'])
     print('Working with %s' % contract)
     try:
-
+        sell_contracts = Sell()
         sell_contracts.go_to_consumables(contract)
         sell_contracts.sell_item(contract)
-    except:
-         pass
+    except Exception as ex:
+        print(ex)
 
     try:
         search_for_contract = Search()
-        search_for_contract.go_to_search(contract)
-    except:
-          pass
+        search_for_contract.search_contracts('Rare')
+    except Exception as ex:
+        print(ex)
 
     try:
         search_for_contract = Search()
         search_for_contract.relist_and_clear_sold()
-    #except: TypeError
-    #    print("Some pics was not found")
-    except:
-        pass
+    except Exception as ex:
+        print(ex)
 
-    print('DONE')
-    time.sleep(randint(0, 30))
+        print('DONE')
+        time.sleep(randint(0, 30))

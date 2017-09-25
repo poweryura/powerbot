@@ -19,8 +19,10 @@ class Tabs(object):
         relist_all = 'relist_all.png'
         send_all_to_club = 'send_all_to_club.png'
         nextarrow = 'nextarrow.png'
-
+        search_results = 'search_results.png'
         watch = 'watch.png'
+        ok = 'ok.png'
+
 
         class Consumables(object):
             type_player_training_big = 'type_player_training_big.png'
