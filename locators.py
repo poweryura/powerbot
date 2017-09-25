@@ -15,12 +15,12 @@ class Buttons(object):
     'class="'
     ''
 class Tabs(object):
-    Transfers = (By.XPATH, ".//*[@id='footer']/button[5]")
+    Transfers = (By.XPATH, '//*[@id="footer"]/button[5]')
 
     class TransfersIn(object):
-        Search_Transfer_market = (By.XPATH, "/html/body/section/article/div[1]")
-        Transfer_List = (By.XPATH, "/html/body/section/article/div[2]")
-        Transfer_Target = (By.XPATH,"/html/body/section/article/div[3]")
+        Search_Transfer_market = (By.XPATH, "//*[@class='tile transferMarketTile']")
+        Transfer_List = (By.XPATH, "//*[@class='tile col-mobile-1-2 col-1-2 transferListTile']")
+        Transfer_Target = (By.XPATH, "//*[@class='tile col-mobile-1-2 col-1-2 transferTargetsTile']")
 
         class SearchTransferMarket(object):
             Consumables = (By.XPATH, "/html/body/section/article/div[1]/div[1]/div/a[4]")

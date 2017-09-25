@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="693e2979-efb4-43b1-ab16-1ddb7e81018a" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Page.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/locators.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/consumables_tab.png" afterPath="$PROJECT_DIR$/consumables_tab.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/consumables_tab_selected.png" afterPath="$PROJECT_DIR$/consumables_tab_selected.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/search_button.PNG" afterPath="$PROJECT_DIR$/search_button.PNG" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Pics.py" afterPath="$PROJECT_DIR$/Pics.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SeleniumScript.py" afterPath="$PROJECT_DIR$/SeleniumScript.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/locators.py" afterPath="$PROJECT_DIR$/locators.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -20,14 +13,14 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.6343923">
+    <splitter split-orientation="horizontal" split-proportion="0.53801477">
       <split-first>
         <leaf>
           <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/main.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-76">
-                  <caret line="310" column="0" lean-forward="false" selection-start-line="310" selection-start-column="0" selection-end-line="310" selection-end-column="0" />
+                <state relative-caret-position="579">
+                  <caret line="311" column="0" lean-forward="true" selection-start-line="311" selection-start-column="0" selection-end-line="311" selection-end-column="0" />
                   <folding>
                     <element signature="e#0#15#0" expanded="true" />
                     <element signature="e#988#1238#0" expanded="false" />
@@ -36,12 +29,12 @@
                     <element signature="e#2311#2444#0" expanded="false" />
                     <element signature="e#2469#5625#0" expanded="false" />
                     <element signature="e#2568#2613#0" expanded="false" />
-                    <element signature="e#6969#7514#0" expanded="false" />
-                    <element signature="e#7653#8316#0" expanded="false" />
-                    <element signature="e#8666#8877#0" expanded="false" />
-                    <element signature="e#8977#9230#0" expanded="false" />
-                    <element signature="e#13861#15574#0" expanded="false" />
-                    <element signature="e#16417#17122#0" expanded="false" />
+                    <element signature="e#6971#7516#0" expanded="false" />
+                    <element signature="e#7655#8318#0" expanded="false" />
+                    <element signature="e#8668#8879#0" expanded="false" />
+                    <element signature="e#8979#9232#0" expanded="false" />
+                    <element signature="e#13981#15694#0" expanded="false" />
+                    <element signature="e#16535#17240#0" expanded="false" />
                   </folding>
                 </state>
               </provider>
@@ -50,8 +43,8 @@
           <file leaf-file-name="locators.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/locators.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="192">
-                  <caret line="8" column="4" lean-forward="false" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="4" />
+                <state relative-caret-position="404">
+                  <caret line="17" column="4" lean-forward="false" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="4" />
                   <folding />
                 </state>
               </provider>
@@ -106,8 +99,8 @@
           <file leaf-file-name="locators.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/locators.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="240">
-                  <caret line="10" column="61" lean-forward="false" selection-start-line="10" selection-start-column="61" selection-end-line="10" selection-end-column="61" />
+                <state relative-caret-position="404">
+                  <caret line="17" column="28" lean-forward="false" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="28" />
                   <folding />
                 </state>
               </provider>
@@ -151,8 +144,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1160" />
-    <option name="width" value="2280" />
+    <option name="x" value="1249" />
+    <option name="width" value="2191" />
     <option name="height" value="1400" />
   </component>
   <component name="ProjectLevelVcsManager">
@@ -264,14 +257,13 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1160" y="0" width="2280" height="1400" extended-state="0" />
-    <editor active="true" />
+    <frame x="1249" y="0" width="2191" height="1400" extended-state="0" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.106756754" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11121539" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27114624" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27114624" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32964426" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32964426" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -397,16 +389,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/locators.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="8" column="4" lean-forward="false" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="4" />
+        <state relative-caret-position="404">
+          <caret line="17" column="4" lean-forward="false" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="4" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-76">
-          <caret line="310" column="0" lean-forward="false" selection-start-line="310" selection-start-column="0" selection-end-line="310" selection-end-column="0" />
+        <state relative-caret-position="579">
+          <caret line="311" column="0" lean-forward="true" selection-start-line="311" selection-start-column="0" selection-end-line="311" selection-end-column="0" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
             <element signature="e#988#1238#0" expanded="false" />
@@ -415,12 +407,12 @@
             <element signature="e#2311#2444#0" expanded="false" />
             <element signature="e#2469#5625#0" expanded="false" />
             <element signature="e#2568#2613#0" expanded="false" />
-            <element signature="e#6969#7514#0" expanded="false" />
-            <element signature="e#7653#8316#0" expanded="false" />
-            <element signature="e#8666#8877#0" expanded="false" />
-            <element signature="e#8977#9230#0" expanded="false" />
-            <element signature="e#13861#15574#0" expanded="false" />
-            <element signature="e#16417#17122#0" expanded="false" />
+            <element signature="e#6971#7516#0" expanded="false" />
+            <element signature="e#7655#8318#0" expanded="false" />
+            <element signature="e#8668#8879#0" expanded="false" />
+            <element signature="e#8979#9232#0" expanded="false" />
+            <element signature="e#13981#15694#0" expanded="false" />
+            <element signature="e#16535#17240#0" expanded="false" />
           </folding>
         </state>
       </provider>

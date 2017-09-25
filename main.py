@@ -165,7 +165,7 @@ class Main:
         except:
             print('Looks logged in')
 
-        WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.XPATH, ".//*[@id='footer']/button[5]")))
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, ".//*[@id='footer']/button[5]")))
 
         w = WindowMgr()
         w.find_window_wildcard(".*EA SPORTS.*")
@@ -175,8 +175,8 @@ class Main:
         self.global_browser_size_bottom = w.getWindowBottomSizes()
         self.global_browser_size_left = w.getWindowLeftSizes()
         self.global_browser_size_right = w.getWindowRightSizes()
-        if Main.wait_for_picture(self, Pics.Tabs.TransferMarket.ok, self.global_browser_size, 1) is not None:
-            Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.ok, self.global_browser_size))
+        #if Main.wait_for_picture(self, Pics.Tabs.TransferMarket.ok, self.global_browser_size, 1) is not None:
+        #    Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.ok, self.global_browser_size))
 
 
     @Service.timing
@@ -241,7 +241,7 @@ class Main:
             return
         counter = 0
         print('Something found, doing shopping')
-        pdb.set_trace()
+
 
         while Main.wait_for_picture(self, Pics.Tabs.TransferMarket.nextarrow, self.global_browser_size_top, 3):
             counter = counter + 1
@@ -296,13 +296,20 @@ class Search(Main):
         self.buy_contracts(self.global_browser_size_left, contract_type)
 
     def relist_and_clear_sold(self):
-
+        pdb.set_trace()
+        time.sleep(1)
         Main.wait_for_element_click(self, el.Tabs.Transfers)
+        time.sleep(1)
         Main.wait_for_element_click(self, el.Tabs.TransfersIn.Transfer_List)
+
         print("Trying to re-list")
         try:
-            Main.wait_for_element_click(self, el.Buttons.Re_listAll, 5)
-            Main.wait_for_element_click(self, el.Buttons.Yes, 5)
+            time.sleep(1)
+            Main.wait_for_element_click(self, el.Buttons.Re_listAll)
+            time.sleep(1)
+            Main.wait_for_element_click(self, el.Buttons.Yes)
+            time.sleep(1)
+
         except:
             print('Nothing to relist')
 
@@ -358,8 +365,7 @@ if __name__ == '__main__':
 
     #
     search_for_contract = Search()
-    #search_for_contract.search_contracts('Rare')
-
+    search_for_contract.search_contracts('Rare')
     search_for_contract.relist_and_clear_sold()
     #
     # sell_contracts = Sell()
