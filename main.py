@@ -7,6 +7,8 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
+
 import os
 from itertools import count
 from multiprocessing import Process
@@ -153,6 +155,8 @@ class WindowMgr:
         return browser_size_right
 
 
+
+
 class Main:
 
     def __init__(self):
@@ -160,13 +164,15 @@ class Main:
         options.add_argument(r"user-data-dir=C:\Users\qadmin\AppData\Local\Google\Chrome\User Data")
         self.driver = webdriver.Chrome(executable_path="chromedriver.exe", chrome_options=options)
         self.driver.implicitly_wait(10)
+
         try:
             Main.wait_for_element_click(self, el.Buttons.MainLogin_FUT, 10)
         except:
             print('Looks logged in')
 
-        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, ".//*[@id='footer']/button[5]")))
 
+        Main.wait_for_element(self, el.Tabs.Logo, 15)
+        print("Logo found")
         w = WindowMgr()
         w.find_window_wildcard(".*EA SPORTS.*")
         w.set_foreground()
@@ -235,42 +241,57 @@ class Main:
         #Main.wait_for_picture(self, Pics.Tabs.TransferMarket.search_results, self.global_browser_size_top)
         try:
             Main.wait_for_element(self, el.Buttons.Watch)
-            Main.wait_for_element_click(self, el.Buttons.Next)
+            #Main.wait_for_element_click(self, el.Buttons.Next)
         except:
             print("Nothing found in search query")
             return
         counter = 0
         print('Something found, doing shopping')
+        try:
+            while Main.wait_for_element(self, el.Buttons.Next) is None:
+                time.sleep(1)
+                Main.wait_for_element_click(self, el.Buttons.Next)
 
+                counter = counter + 1
+                found_list = self.driver.find_elements_by_xpath(Picsy['Contracts'][contract_type]['contract_player_small'])
+                print(found_list)
+                pdb.set_trace()
+                random.choice(found_list).click()
+                #Main.wait_for_element_click(self, random.choice(found_list))
 
-        while Main.wait_for_picture(self, Pics.Tabs.TransferMarket.nextarrow, self.global_browser_size_top, 3):
-            counter = counter + 1
-            Main.wait_for_picture(self, Pics.Tabs.TransferMarket.search_results, self.global_browser_size_top)
-            if str(list(pyautogui.locateAllOnScreen(Picsy['Contracts'][contract_type]['contract_player_small'], region=global_browser_size, grayscale=True))) == '[]':
-                print('No contract found')
-                if Main.wait_for_picture(self, Pics.Tabs.TransferMarket.nextarrow, self.global_browser_size_top, 1):
-                    print('Clicking on next page: %s' % str(counter))
-                    Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.nextarrow, self.global_browser_size_top, 1))
-            else:
-                player_counter = 0
-                for player in pyautogui.locateAllOnScreen(Picsy['Contracts'][contract_type]['contract_player_small'], region=global_browser_size, grayscale=True):
-                    player_counter = player_counter + 1
-                    print('Clicking on contract %s ' % player_counter)
-                    Main.click_on_center(player)
-                    if Main.wait_for_picture(self, Picsy['Contracts'][contract_type]['contract_player_full'], self.global_browser_size_right, 2) is not False:
-                        print('Clicking buy')
-                        Main.click_on_center(Main.wait_for_picture(self, Pics.Actions.buy_now, self.global_browser_size))
-                        pyautogui.typewrite(['enter'], interval=0.1)
-                        Main.click_on_center(Main.wait_for_picture(self, Pics.Actions.send_to_my_club, self.global_browser_size_right, 3))
-                Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.nextarrow, self.global_browser_size_top, 2))
+                #for each in range(len(found_list) - 1, -1, -1):
+                #for each in found_list:
+                #    print("clicking")
+                #    #found_list[each].click()
+                #    Main.wait_for_element_click(self, each)
+                #    Main.wait_for_element(self, (By.XPATH, Picsy['Contracts'][contract_type]['contract_player_big']))
+                if Main.wait_for_element(self, (By.XPATH, Picsy['Contracts'][contract_type]['buy_now_price']), 1) is None:
+                    Main.wait_for_element_click(self, el.Buttons.SellBar.Buy_now)
+                    pyautogui.typewrite(['enter'], interval=0.1)
+                    Main.wait_for_element_click(self, el.Buttons.SellBar.Send_to_My_Club)
+                else:
+                    break
+                #pdb.set_trace()
+                pyautogui.typewrite(['enter'], interval=0.1)
+                Main.wait_for_element_click(self, el.Buttons.Next)
+                time.sleep(1)
+        except TimeoutException:
+            print('done loop')
+
+            # for each in found_list:
+            #     print("clicking")
+            #     each.click()
 
 
 class Search(Main):
 
     def search_contracts(self, contract_type):
-
+        print(inspect.stack()[0][3])
+        time.sleep(2)
         Main.wait_for_element_click(self, el.Tabs.Transfers)
+        time.sleep(2)
         Main.wait_for_element_click(self, el.Tabs.TransfersIn.Search_Transfer_market)
+        time.sleep(2)
         Main.wait_for_element_click(self, el.Tabs.TransfersIn.SearchTransferMarket.Consumables)
         Main.wait_for_element_click(self, el.Buttons.Reset)
 
@@ -286,17 +307,13 @@ class Search(Main):
         pyautogui.typewrite(['tab'])
         pyautogui.typewrite(Picsy['Contracts'][contract_type]['buy_max_price'])
 
-
-
         Main.wait_for_element_click(self, el.Buttons.Search)
         Main.wait_for_element(self, el.Buttons.Watch)
-
-        Main.wait_for_picture(self, Pics.Tabs.TransferMarket.watch, self.global_browser_size_top)
 
         self.buy_contracts(self.global_browser_size_left, contract_type)
 
     def relist_and_clear_sold(self):
-        pdb.set_trace()
+        print(inspect.stack()[0][3])
         time.sleep(1)
         Main.wait_for_element_click(self, el.Tabs.Transfers)
         time.sleep(1)
@@ -319,35 +336,43 @@ class Search(Main):
         except:
             print('Nothing to Clear')
 
-
-class Sell(Main):
-
-    def go_to_consumables(self, contract_type):
+    def go_to_consumables(self):
         print(inspect.stack()[0][3])
-        Main.click_on_center(Main.wait_for_list_of_pictures(self, (Pics.Tabs.Club.club, Pics.Tabs.Club.club_selected), self.global_browser_size, 2))
-        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.Club.club_consumables, self.global_browser_size))
-        #pdb.set_trace()
-        Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.Club.Consumables.cons_contracts, self.global_browser_size))
-        Main.click_on_center(Main.wait_for_picture(self, Picsy['Contracts'][contract_type]['contract_player_small'], self.global_browser_size))
+        time.sleep(2)
+        Main.wait_for_element_click(self, el.Tabs.Club)
+        time.sleep(2)
+        Main.wait_for_element_click(self, el.Tabs.ClubIn.Consumables)
+        time.sleep(2)
+        Main.wait_for_element_click(self, el.Tabs.ClubIn.Contracts)
 
     def sell_item(self, contract_type):
         print(inspect.stack()[0][3])
-        #pdb.set_trace()
+        Main.wait_for_element_click(self, (By.XPATH, Picsy['Contracts'][contract_type]['contract_player_small']))
         sell_count = 0
-        for sell in range(1, 30):
-            sell_count = sell_count + 1
-            print(sell_count)
-            Main.click_on_center(Main.wait_for_picture(self, Pics.Actions.list_on_transfer_market, self.global_browser_size))
-            pyautogui.typewrite(['tab'], interval=1)
-            pyautogui.typewrite(Picsy['Contracts'][contract_type]['sell_min_price'], interval=0.1)
-            pyautogui.typewrite(['tab'], interval=0.1)
-            pyautogui.typewrite(['tab'], interval=0.1)
-            pyautogui.typewrite(['tab'], interval=0.1)
-            pyautogui.typewrite(Picsy['Contracts'][contract_type]['sell_max_price'], interval=0.1)
-            Main.click_on_center(Main.wait_for_picture(self, Pics.Actions.list_item, self.global_browser_size))
-            if Main.wait_for_picture(self, Pics.Messages.warning_message, self.global_browser_size, 1):
-                pyautogui.typewrite(['enter'], interval=0.1)
-                break
+        try:
+            for sell in range(1, 10):
+                print("Starting selling")
+
+                sell_count = sell_count + 1
+                time.sleep(1)
+                #pdb.set_trace()
+                Main.wait_for_element(self, (By.XPATH, Picsy['Contracts'][contract_type]['contract_player_big']))
+                Main.wait_for_element_click(self, el.Buttons.SellBar.List_on_Transfer_Market)
+                Main.wait_for_element_click(self, el.Buttons.SellBar.Start_Price)
+
+                pyautogui.typewrite(['del'])
+                pyautogui.typewrite(Picsy['Contracts'][contract_type]['sell_min_price'], interval=0.1)
+                pyautogui.typewrite(['tab'])
+                pyautogui.typewrite(['tab'])
+                pyautogui.typewrite(['tab'])
+                pyautogui.typewrite(Picsy['Contracts'][contract_type]['sell_max_price'], interval=0.1)
+                Main.wait_for_element_click(self, el.Buttons.SellBar.List_item)
+                print("Sent for selling: %s" % str(sell_count))
+
+        except TimeoutException as ex:
+            print(ex)
+            pyautogui.typewrite(['enter'], interval=0.1)
+
 
 
 if __name__ == '__main__':
@@ -364,13 +389,15 @@ if __name__ == '__main__':
     # WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, ".//*[@id='footer']/button[5]")))
 
     #
-    search_for_contract = Search()
-    search_for_contract.search_contracts('Rare')
-    search_for_contract.relist_and_clear_sold()
+    Start = Search()
+    Start.search_contracts('Gold')
     #
-    # sell_contracts = Sell()
-    # sell_contracts.go_to_consumables('Gold')
-    # sell_contracts.sell_item('Gold')
+    # Start.relist_and_clear_sold()
+
+    #Start.go_to_consumables()
+    #Start.sell_item('Gold')
+
+    #pdb.set_trace()
 
     sys.exit()
 while True:
@@ -383,7 +410,7 @@ while True:
     print('Working with %s' % contract)
     try:
         sell_contracts = Sell()
-        sell_contracts.go_to_consumables(contract)
+        sell_contracts.go_to_consumables()
         sell_contracts.sell_item(contract)
     except Exception as ex:
         print(ex)

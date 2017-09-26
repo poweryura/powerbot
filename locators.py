@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 
+
 class Buttons(object):
     MainLogin_FUT = (By.XPATH, '//*[@id="Login"]/div/div/div[1]/div/button')
     Login_EA = (By.XPATH, '//*[@id="btnLogin"]/span/span')
@@ -11,11 +12,19 @@ class Buttons(object):
     Next = (By.XPATH, "//*[@class='btn-flat pagination next']")
     Yes = (By.XPATH, "//*[@class='btn-flat' and contains(text(),'Yes')]")
 
+    class SellBar(object):
+        List_on_Transfer_Market = (By.XPATH, "//*[@class='btn-text' and contains(text(),'List on Transfer Market')]")
+        Start_Price = (By.CLASS_NAME, "inputBox")
+        List_item = (By.XPATH, "//*[@class='standard call-to-action']")
+        Buy_now = (By.XPATH, "//*[@class='btn-text' and contains(text(),'Buy Now')]")
+        Send_to_My_Club = (By.XPATH, "//*[@class='btn-text' and contains(text(),'Send to My Club')]")
 
-    'class="'
-    ''
+
 class Tabs(object):
+
+    Logo = (By.XPATH, "//*[@class='btnFooter btnLogo']")
     Transfers = (By.XPATH, '//*[@id="footer"]/button[5]')
+    Club = (By.XPATH, '//*[@id="footer"]/button[7]')
 
     class TransfersIn(object):
         Search_Transfer_market = (By.XPATH, "//*[@class='tile transferMarketTile']")
@@ -25,6 +34,7 @@ class Tabs(object):
         class SearchTransferMarket(object):
             Consumables = (By.XPATH, "/html/body/section/article/div[1]/div[1]/div/a[4]")
 
-        class Contracts(object):
-            Contract_gold = (By.XPATH, "//div[contains(@class, 'small consumable item common gold')]")
-            Contract_Rare = (By.XPATH, "//div[contains(@class, 'small consumable item rare gold')]")
+    class ClubIn(object):
+        Consumables = (By.XPATH, "//*[@class='tileHeader' and contains(text(),'Consumables')]")
+        Contracts = (By.XPATH, "//*[@class='tileHeader' and contains(text(),'Contracts')]")
+
