@@ -11,6 +11,8 @@ class Buttons(object):
     Clear_Sold = (By.XPATH, "//span[.='Clear Sold']")
     Next = (By.XPATH, "//*[@class='btn-flat pagination next']")
     Yes = (By.XPATH, "//*[@class='btn-flat' and contains(text(),'Yes')]")
+    Ok = (By.XPATH, "//*[@class='btn-flat' and contains(text(),'Ok')]")
+
 
     class SellBar(object):
         List_on_Transfer_Market = (By.XPATH, "//*[@class='btn-text' and contains(text(),'List on Transfer Market')]")

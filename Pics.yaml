@@ -10,9 +10,9 @@ Contracts:
 
 
   Rare:
-    contract_player_big: 'contract_player_gold_RARE_big.png'
+    contract_player_big: "//*[@class='large consumable item rare gold']"
     contract_player_small: "//div[contains(@class, 'small consumable item rare gold')]"
     sell_min_price: '300'
     sell_max_price: '350'
-    bid_min_price: '200'
-    buy_max_price: '250'
+    bid_min_price: '250'
+    buy_max_price: '300'

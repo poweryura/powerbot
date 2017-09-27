@@ -166,21 +166,21 @@ class Main:
         self.driver.implicitly_wait(10)
 
         try:
-            Main.wait_for_element_click(self, el.Buttons.MainLogin_FUT, 10)
+            Main.wait_for_element_click(self, el.Buttons.MainLogin_FUT, 15)
         except:
             print('Looks logged in')
 
 
         Main.wait_for_element(self, el.Tabs.Logo, 15)
         print("Logo found")
-        w = WindowMgr()
-        w.find_window_wildcard(".*EA SPORTS.*")
-        w.set_foreground()
-        self.global_browser_size = w.getWindowSizes()
-        self.global_browser_size_top = w.getWindowTopSizes()
-        self.global_browser_size_bottom = w.getWindowBottomSizes()
-        self.global_browser_size_left = w.getWindowLeftSizes()
-        self.global_browser_size_right = w.getWindowRightSizes()
+        # w = WindowMgr()
+        # w.find_window_wildcard(".*EA SPORTS.*")
+        # w.set_foreground()
+        # self.global_browser_size = w.getWindowSizes()
+        # self.global_browser_size_top = w.getWindowTopSizes()
+        # self.global_browser_size_bottom = w.getWindowBottomSizes()
+        # self.global_browser_size_left = w.getWindowLeftSizes()
+        # self.global_browser_size_right = w.getWindowRightSizes()
         #if Main.wait_for_picture(self, Pics.Tabs.TransferMarket.ok, self.global_browser_size, 1) is not None:
         #    Main.click_on_center(Main.wait_for_picture(self, Pics.Tabs.TransferMarket.ok, self.global_browser_size))
 
@@ -236,48 +236,56 @@ class Main:
         pyautogui.click(coordinates)
 
     @Service.timing
-    def buy_contracts(self, global_browser_size, contract_type):
+    def buy_contracts(self, contract_type):
 
-        #Main.wait_for_picture(self, Pics.Tabs.TransferMarket.search_results, self.global_browser_size_top)
+        # Main.wait_for_picture(self, Pics.Tabs.TransferMarket.search_results, self.global_browser_size_top)
         try:
             Main.wait_for_element(self, el.Buttons.Watch)
-            #Main.wait_for_element_click(self, el.Buttons.Next)
+            # Main.wait_for_element_click(self, el.Buttons.Next)
         except:
             print("Nothing found in search query")
             return
         counter = 0
+        found_item = 0
         print('Something found, doing shopping')
-        try:
-            while Main.wait_for_element(self, el.Buttons.Next) is None:
-                time.sleep(1)
-                Main.wait_for_element_click(self, el.Buttons.Next)
-
-                counter = counter + 1
+        # try:
+        while Main.wait_for_element(self, el.Buttons.Next) is None:
+            time.sleep(1)
+            counter = counter + 1
+            # for each in range(len(found_list) - 1, -1, -1):
+            # found_list = self.driver.find_elements_by_xpath(Picsy['Contracts'][contract_type]['contract_player_small'])
+            
+            print(counter)
+            # for each in found_list:
+            # found_contract_item = found_contract_item + 1
+            # print("Clicking on %s" % str(found_contract_item))
+            # pdb.set_trace()
+            #print(each)
+            # found_list[1].click()
+            # pdb.set_trace()
+            try:
+                self.driver.implicitly_wait(1)
                 found_list = self.driver.find_elements_by_xpath(Picsy['Contracts'][contract_type]['contract_player_small'])
-                print(found_list)
-                pdb.set_trace()
                 random.choice(found_list).click()
-                #Main.wait_for_element_click(self, random.choice(found_list))
+                found_item = found_item + 1
+                print("Clicking on %s" % str(found_item))
+                self.driver.find_elements_by_xpath(Picsy['Contracts'][contract_type]['contract_player_big'])
 
-                #for each in range(len(found_list) - 1, -1, -1):
-                #for each in found_list:
-                #    print("clicking")
-                #    #found_list[each].click()
-                #    Main.wait_for_element_click(self, each)
-                #    Main.wait_for_element(self, (By.XPATH, Picsy['Contracts'][contract_type]['contract_player_big']))
-                if Main.wait_for_element(self, (By.XPATH, Picsy['Contracts'][contract_type]['buy_now_price']), 1) is None:
-                    Main.wait_for_element_click(self, el.Buttons.SellBar.Buy_now)
-                    pyautogui.typewrite(['enter'], interval=0.1)
-                    Main.wait_for_element_click(self, el.Buttons.SellBar.Send_to_My_Club)
-                else:
-                    break
-                #pdb.set_trace()
-                pyautogui.typewrite(['enter'], interval=0.1)
-                Main.wait_for_element_click(self, el.Buttons.Next)
-                time.sleep(1)
-        except TimeoutException:
-            print('done loop')
-
+            except IndexError:
+                print('Nothing found')
+            
+            # Main.wait_for_element_click(self, el.Buttons.SellBar.Buy_now)
+            # Main.wait_for_element(self, (By.XPATH, "//*[contains(text(), 'Are you sure you want to buy this item for 200 coins')]"))
+            # Main.wait_for_element_click(self, el.Buttons.Ok)
+            # Main.wait_for_element_click(self, el.Buttons.SellBar.Send_to_My_Club)
+            
+            try:
+                Main.wait_for_element_click(self, el.Buttons.Next, 3)
+            except TimeoutException:
+                print('Pagination is end')
+                return
+                
+        print('done loop')
             # for each in found_list:
             #     print("clicking")
             #     each.click()
@@ -310,7 +318,7 @@ class Search(Main):
         Main.wait_for_element_click(self, el.Buttons.Search)
         Main.wait_for_element(self, el.Buttons.Watch)
 
-        self.buy_contracts(self.global_browser_size_left, contract_type)
+        self.buy_contracts(contract_type)
 
     def relist_and_clear_sold(self):
         print(inspect.stack()[0][3])
@@ -390,7 +398,7 @@ if __name__ == '__main__':
 
     #
     Start = Search()
-    Start.search_contracts('Gold')
+    Start.search_contracts('Rare')
     #
     # Start.relist_and_clear_sold()
 
