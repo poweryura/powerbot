@@ -217,6 +217,9 @@ class Main:
 
     def wait_for_element(self, element, time=5,):
         WebDriverWait(self.driver, time).until(EC.element_to_be_clickable(element))
+    
+    def wait_for_title(self, title_locator):
+        WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located(title_locator))
 
     @staticmethod
     def click_on_center(coordinates):
