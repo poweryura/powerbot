@@ -9,6 +9,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
+from selenium.webdriver.common.keys import Keys
+
 import os
 from itertools import count
 from multiprocessing import Process
@@ -157,10 +159,11 @@ class WindowMgr:
 class Main:
 
     def __init__(self):
-        try:
-            os.system("taskkill /im chrome.exe")
-        except:
-            pass
+        # try:
+        #     #os.system("taskkill /im chrome.exe")
+        #     #os.system("taskkill /f /im  chrome.exe")
+        # except:
+        #     pass
 
         options = webdriver.ChromeOptions()
         options.add_argument(r"user-data-dir=C:\Users\qadmin\AppData\Local\Google\Chrome\User Data")
@@ -267,7 +270,14 @@ class Main:
                 print("Clicking on %s" % str(found_item))
                 self.driver.find_elements_by_xpath(Picsy['Contracts'][contract_type]['contract_player_big'])
                 Main.wait_for_element_click(self, el.Buttons.SellBar.Buy_now)
-                Main.wait_for_element(self, (By.XPATH, "//*[contains(text(), 'Are you sure you want to buy this item for 250 coins')]"))
+                try:
+                    Main.wait_for_element(self, (By.XPATH, "//*[contains(text(), 'Are you sure you want to buy this item for 200 coins')]"))
+                except:
+                    pass
+                try: 
+                    Main.wait_for_element(self, (By.XPATH, "//*[contains(text(), 'Are you sure you want to buy this item for 250 coins')]"))
+                except:
+                    pass
                 Main.wait_for_element_click(self, el.Buttons.Ok)
                 Main.wait_for_element_click(self, el.Buttons.SellBar.Send_to_My_Club)
 
@@ -341,7 +351,10 @@ class Search(Main):
         Main.wait_for_element_click(self, (By.XPATH, "//*[@class='label' and contains(text(),'Quality')]"))
         Main.wait_for_element_click(self, (By.XPATH, "//*[@class='with-icon' and contains(text(),'Gold')]"))
 
+        #self.driver.find_element_by_xpath("//*[@class='numericInput']").clear()
         self.driver.find_element_by_xpath("//*[@class='numericInput']").send_keys(Picsy['Contracts'][contract_type]['bid_min_price'])
+
+        #self.driver.find_elements_by_xpath("//*[@class='numericInput']")[3].clear()
         self.driver.find_elements_by_xpath("//*[@class='numericInput']")[3].send_keys(Picsy['Contracts'][contract_type]['buy_max_price'])
 
 
@@ -382,7 +395,6 @@ class Search(Main):
         Main.wait_for_element_click(self, el.Tabs.ClubIn.Consumables)
         time.sleep(2)
         Main.wait_for_element_click(self, el.Tabs.ClubIn.Contracts)
-        print(inspect.stack()[0][3])
         Main.wait_for_element_click(self, (By.XPATH, Picsy['Contracts'][contract_type]['contract_player_small']))
         sell_count = 0
         try:
@@ -391,17 +403,21 @@ class Search(Main):
 
                 sell_count = sell_count + 1
                 time.sleep(1)
-                #pdb.set_trace()
                 Main.wait_for_element(self, (By.XPATH, Picsy['Contracts'][contract_type]['contract_player_big']))
                 Main.wait_for_element_click(self, el.Buttons.SellBar.List_on_Transfer_Market)
-                Main.wait_for_element_click(self, el.Buttons.SellBar.Start_Price)
+                Main.wait_for_element(self, (By.XPATH, "//*[@class='numericInput filled']"))
 
-                pyautogui.typewrite(['del'])
-                pyautogui.typewrite(Picsy['Contracts'][contract_type]['sell_min_price'], interval=0.1)
-                pyautogui.typewrite(['tab'])
-                pyautogui.typewrite(['tab'])
-                pyautogui.typewrite(['tab'])
-                pyautogui.typewrite(Picsy['Contracts'][contract_type]['sell_max_price'], interval=0.1)
+                self.driver.find_element_by_xpath("//*[@class='numericInput filled']").send_keys(Keys.BACKSPACE)
+                self.driver.find_element_by_xpath("//*[@class='numericInput filled']").send_keys(Keys.BACKSPACE)
+                self.driver.find_element_by_xpath("//*[@class='numericInput filled']").send_keys(Keys.BACKSPACE)
+
+                self.driver.find_element_by_xpath("//*[@class='numericInput filled']").send_keys(Picsy['Contracts'][contract_type]['sell_min_price'])
+                self.driver.find_elements_by_xpath("//*[@class='numericInput filled']")[1].send_keys(Keys.BACKSPACE)
+                self.driver.find_elements_by_xpath("//*[@class='numericInput filled']")[1].send_keys(Keys.BACKSPACE)
+                self.driver.find_elements_by_xpath("//*[@class='numericInput filled']")[1].send_keys(Keys.BACKSPACE)
+
+                self.driver.find_elements_by_xpath("//*[@class='numericInput filled']")[1].send_keys(Picsy['Contracts'][contract_type]['sell_max_price'])
+
                 Main.wait_for_element_click(self, el.Buttons.SellBar.List_item)
                 print("Sent for selling: %s" % str(sell_count))
 
@@ -428,7 +444,7 @@ if __name__ == '__main__':
     # Start.sell_item("Rare")
     # Start.relist_and_clear_sold()
     # Start.exit()
-
+    Start = Search()
 while True:
     global first_hour
 
@@ -436,14 +452,20 @@ while True:
 
     print('Iteration to search items : %s' % str(run))
     try:
-        Start = Search()
         Start.login()
-        Start.search_contracts("Rare")
-        Start.sell_item("Rare")
-        Start.relist_and_clear_sold()
-        Start.exit()
-        time.sleep(randint(0, 60))
+        Start.search_contracts(random.choice(['Rare', 'Gold']))
     except Exception as ex:
         print(ex)
 
+    try:
+        Start.sell_item(random.choice(['Rare', 'Gold']))
+    except Exception as ex:
+        print(ex)
+
+    try:
+        Start.relist_and_clear_sold()
+    except Exception as ex:
+        print(ex)
+
+    time.sleep(randint(0, 60))
 

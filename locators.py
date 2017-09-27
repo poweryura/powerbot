@@ -16,7 +16,7 @@ class Buttons(object):
 
     class SellBar(object):
         List_on_Transfer_Market = (By.XPATH, "//*[@class='btn-text' and contains(text(),'List on Transfer Market')]")
-        Start_Price = (By.CLASS_NAME, "inputBox")
+        Start_Price = (By.CLASS_NAME, "numericInput filled")
         List_item = (By.XPATH, "//*[@class='standard call-to-action']")
         Buy_now = (By.XPATH, "//*[@class='btn-text' and contains(text(),'Buy Now')]")
         Send_to_My_Club = (By.XPATH, "//*[@class='btn-text' and contains(text(),'Send to My Club')]")
