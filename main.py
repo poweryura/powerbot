@@ -405,6 +405,9 @@ class Search(Main):
                 print("Starting selling")
 
                 sell_count = sell_count + 1
+                
+                
+                
                 time.sleep(1)
                 Main.wait_for_element(self, (By.XPATH, Picsy['Contracts'][contract_type]['contract_player_big']))
                 Main.wait_for_element_click(self, el.Buttons.SellBar.List_on_Transfer_Market)
