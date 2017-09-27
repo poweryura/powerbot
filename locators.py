@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 
 class Buttons(object):
     MainLogin_FUT = (By.XPATH, '//*[@id="Login"]/div/div/div[1]/div/button')
-    Login_EA = (By.XPATH, '//*[@id="btnLogin"]/span/span')
+    Login_EA = (By.XPATH, "//span[.='Log In']")
     Reset = (By.XPATH, "/html/body/section/article/div[1]/div[2]/div/div[1]/div[2]/span[1]")
     Search = (By.XPATH, "/html/body/section/article/div[1]/div[2]/div/div[1]/div[1]/span[1]")
     Watch = (By.XPATH, "/html/body/section/article/section/section[2]/div/div/div[3]/div[1]/div[3]/button")

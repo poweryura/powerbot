@@ -14,5 +14,5 @@ Contracts:
     contract_player_small: "//div[contains(@class, 'small consumable item rare gold')]"
     sell_min_price: '300'
     sell_max_price: '350'
-    bid_min_price: '250'
-    buy_max_price: '300'
+    bid_min_price: '200'
+    buy_max_price: '250'

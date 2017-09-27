@@ -84,7 +84,6 @@ class Service(object):
         return Picsy
 
 
-
 class WindowMgr:
     """Encapsulates some calls to the winapi for window management"""
 
@@ -155,24 +154,21 @@ class WindowMgr:
         return browser_size_right
 
 
-
-
 class Main:
 
     def __init__(self):
+        try:
+            os.system("taskkill /im chrome.exe")
+        except:
+            pass
+
         options = webdriver.ChromeOptions()
         options.add_argument(r"user-data-dir=C:\Users\qadmin\AppData\Local\Google\Chrome\User Data")
         self.driver = webdriver.Chrome(executable_path="chromedriver.exe", chrome_options=options)
-        self.driver.implicitly_wait(10)
+        self.driver.get('https://www.easports.com/fifa/ultimate-team/web-app/')
+        self.driver.implicitly_wait(1)
 
-        try:
-            Main.wait_for_element_click(self, el.Buttons.MainLogin_FUT, 15)
-        except:
-            print('Looks logged in')
-
-
-        Main.wait_for_element(self, el.Tabs.Logo, 15)
-        print("Logo found")
+        #Main.wait_for_element(self, el.Tabs.Logo, 15)
         # w = WindowMgr()
         # w.find_window_wildcard(".*EA SPORTS.*")
         # w.set_foreground()
@@ -262,7 +258,7 @@ class Main:
             # pdb.set_trace()
             #print(each)
             # found_list[1].click()
-            # pdb.set_trace()
+            #
             try:
                 self.driver.implicitly_wait(1)
                 found_list = self.driver.find_elements_by_xpath(Picsy['Contracts'][contract_type]['contract_player_small'])
@@ -270,15 +266,17 @@ class Main:
                 found_item = found_item + 1
                 print("Clicking on %s" % str(found_item))
                 self.driver.find_elements_by_xpath(Picsy['Contracts'][contract_type]['contract_player_big'])
+                Main.wait_for_element_click(self, el.Buttons.SellBar.Buy_now)
+                Main.wait_for_element(self, (By.XPATH, "//*[contains(text(), 'Are you sure you want to buy this item for 250 coins')]"))
+                Main.wait_for_element_click(self, el.Buttons.Ok)
+                Main.wait_for_element_click(self, el.Buttons.SellBar.Send_to_My_Club)
 
             except IndexError:
                 print('Nothing found')
-            
-            # Main.wait_for_element_click(self, el.Buttons.SellBar.Buy_now)
-            # Main.wait_for_element(self, (By.XPATH, "//*[contains(text(), 'Are you sure you want to buy this item for 200 coins')]"))
-            # Main.wait_for_element_click(self, el.Buttons.Ok)
-            # Main.wait_for_element_click(self, el.Buttons.SellBar.Send_to_My_Club)
-            
+            except:
+                print('Failed to buy')
+
+
             try:
                 Main.wait_for_element_click(self, el.Buttons.Next, 3)
             except TimeoutException:
@@ -293,27 +291,59 @@ class Main:
 
 class Search(Main):
 
+    def login(self):
+        for i in 'poweryura':
+
+            try:
+                WebDriverWait(self.driver, 1).until(EC.element_to_be_clickable((By.CLASS_NAME, 'user-info')))
+                break
+            except:
+                pass
+
+            try:
+                WebDriverWait(self.driver, 1).until(EC.element_to_be_clickable((By.XPATH, "//*[@class='standard call-to-action' and contains(text(),'Login')]")))
+                self.driver.find_element_by_xpath("//*[@class='standard call-to-action' and contains(text(),'Login')]").click()
+
+                try:
+                    WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable((By.XPATH, "//span[.='Log In']")))
+                    self.driver.find_element_by_xpath("//span[.='Log In']").click()
+                except:
+                    pass
+
+                WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, 'user-info')))
+                break
+            except:
+                pass
+
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, 'user-info')))
+
+        print("Logged IN")
+
     def search_contracts(self, contract_type):
         print(inspect.stack()[0][3])
-        time.sleep(2)
-        Main.wait_for_element_click(self, el.Tabs.Transfers)
-        time.sleep(2)
-        Main.wait_for_element_click(self, el.Tabs.TransfersIn.Search_Transfer_market)
-        time.sleep(2)
-        Main.wait_for_element_click(self, el.Tabs.TransfersIn.SearchTransferMarket.Consumables)
+        #pdb.set_trace()
+
+        WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable(el.Tabs.Transfers)); self.driver.find_element_by_xpath(el.Tabs.Transfers[1]).click()
+
+        #Main.wait_for_element_click(self, el.Tabs.Transfers)
+
+        WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable(el.Tabs.TransfersIn.Search_Transfer_market)); self.driver.find_element_by_xpath(el.Tabs.TransfersIn.Search_Transfer_market[1]).click()
+
+        #Main.wait_for_element_click(self, el.Tabs.TransfersIn.Search_Transfer_market)
+
+        WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable(el.Tabs.TransfersIn.SearchTransferMarket.Consumables));  self.driver.find_element_by_xpath(el.Tabs.TransfersIn.SearchTransferMarket.Consumables[1]).click()
+
+        #Main.wait_for_element_click(self, el.Tabs.TransfersIn.SearchTransferMarket.Consumables);
         Main.wait_for_element_click(self, el.Buttons.Reset)
 
-        Main.wait_for_element_click(self, (By.XPATH, "/html/body/section/article/div[1]/div[2]/div/div[2]/div[1]/div[3]/div/div/img"))
-        Main.wait_for_element_click(self, (By.XPATH, "/html/body/section/article/div[1]/div[2]/div/div[2]/div[1]/div[3]/div/ul/li[6]"))
-        Main.wait_for_element_click(self, (By.XPATH, "/html/body/section/article/div[1]/div[2]/div/div[2]/div[1]/div[4]/div/div/img"))
-        Main.wait_for_element_click(self, (By.XPATH, "/html/body/section/article/div[1]/div[2]/div/div[2]/div[1]/div[4]/div/ul/li[4]"))
-        Main.wait_for_element_click(self, (By.XPATH, "/html/body/section/article/div[1]/div[2]/div/div[2]/div[2]/div[2]/input"))
-        time.sleep(0.2)
-        pyautogui.typewrite(Picsy['Contracts'][contract_type]['bid_min_price'], interval=0.1)
-        pyautogui.typewrite(['tab'])
-        pyautogui.typewrite(['tab'])
-        pyautogui.typewrite(['tab'])
-        pyautogui.typewrite(Picsy['Contracts'][contract_type]['buy_max_price'])
+        Main.wait_for_element_click(self, (By.XPATH, "//*[@class='label' and contains(text(),'Player Training')]"))
+        Main.wait_for_element_click(self, (By.XPATH, "//*[@class='with-icon' and contains(text(),'Contracts')]"))
+        Main.wait_for_element_click(self, (By.XPATH, "//*[@class='label' and contains(text(),'Quality')]"))
+        Main.wait_for_element_click(self, (By.XPATH, "//*[@class='with-icon' and contains(text(),'Gold')]"))
+
+        self.driver.find_element_by_xpath("//*[@class='numericInput']").send_keys(Picsy['Contracts'][contract_type]['bid_min_price'])
+        self.driver.find_elements_by_xpath("//*[@class='numericInput']")[3].send_keys(Picsy['Contracts'][contract_type]['buy_max_price'])
+
 
         Main.wait_for_element_click(self, el.Buttons.Search)
         Main.wait_for_element(self, el.Buttons.Watch)
@@ -344,7 +374,7 @@ class Search(Main):
         except:
             print('Nothing to Clear')
 
-    def go_to_consumables(self):
+    def sell_item(self, contract_type):
         print(inspect.stack()[0][3])
         time.sleep(2)
         Main.wait_for_element_click(self, el.Tabs.Club)
@@ -352,8 +382,6 @@ class Search(Main):
         Main.wait_for_element_click(self, el.Tabs.ClubIn.Consumables)
         time.sleep(2)
         Main.wait_for_element_click(self, el.Tabs.ClubIn.Contracts)
-
-    def sell_item(self, contract_type):
         print(inspect.stack()[0][3])
         Main.wait_for_element_click(self, (By.XPATH, Picsy['Contracts'][contract_type]['contract_player_small']))
         sell_count = 0
@@ -381,6 +409,9 @@ class Search(Main):
             print(ex)
             pyautogui.typewrite(['enter'], interval=0.1)
 
+    def exit(self):
+        self.driver.close()
+
 
 
 if __name__ == '__main__':
@@ -390,50 +421,29 @@ if __name__ == '__main__':
 
     Picsy = Service.load_config_file('Pics.yaml')
 
-    # options = webdriver.ChromeOptions()
-    # options.add_argument(r"user-data-dir=C:\Users\qadmin\AppData\Local\Google\Chrome\User Data")
-    # driver = webdriver.Chrome(executable_path="chromedriver.exe", chrome_options=options)
-    # driver.implicitly_wait(10)
-    # WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, ".//*[@id='footer']/button[5]")))
-
     #
-    Start = Search()
-    Start.search_contracts('Rare')
-    #
+    # Start = Search()
+    # Start.login()
+    # Start.search_contracts("Rare")
+    # Start.sell_item("Rare")
     # Start.relist_and_clear_sold()
+    # Start.exit()
 
-    #Start.go_to_consumables()
-    #Start.sell_item('Gold')
-
-    #pdb.set_trace()
-
-    sys.exit()
 while True:
     global first_hour
 
     run = run + 1
+
     print('Iteration to search items : %s' % str(run))
-
-    contract = random.choice(['Rare'])
-    print('Working with %s' % contract)
     try:
-        sell_contracts = Sell()
-        sell_contracts.go_to_consumables()
-        sell_contracts.sell_item(contract)
+        Start = Search()
+        Start.login()
+        Start.search_contracts("Rare")
+        Start.sell_item("Rare")
+        Start.relist_and_clear_sold()
+        Start.exit()
+        time.sleep(randint(0, 60))
     except Exception as ex:
         print(ex)
 
-    try:
-        search_for_contract = Search()
-        search_for_contract.search_contracts('Rare')
-    except Exception as ex:
-        print(ex)
 
-    try:
-        search_for_contract = Search()
-        search_for_contract.relist_and_clear_sold()
-    except Exception as ex:
-        print(ex)
-
-        print('DONE')
-        time.sleep(randint(0, 30))
