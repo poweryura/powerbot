@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.action_chains import ActionChains
 
 from selenium.webdriver.common.keys import Keys
 
@@ -212,14 +213,17 @@ class Main:
                 break
         return coordinates
 
-    def wait_for_element_click(self, element, time=5,):
+    def wait_for_element_click(self, element, time=3,):
         WebDriverWait(self.driver, time).until(EC.element_to_be_clickable(element)).click()
 
-    def wait_for_element(self, element, time=5,):
+    def wait_for_element(self, element, time=3,):
         WebDriverWait(self.driver, time).until(EC.element_to_be_clickable(element))
     
-    def wait_for_title(self, title_locator):
-        WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located(title_locator))
+    def wait_for_visibility_click(self, element, time=3):
+        WebDriverWait(self.driver, time).until(EC.visibility_of_element_located(element))
+        self.driver.find_element(element[0], element[1]).click()
+
+
 
     @staticmethod
     def click_on_center(coordinates):
@@ -305,7 +309,7 @@ class Main:
 class Search(Main):
 
     def login(self):
-        for i in 'poweryura':
+        for i in range(1, 10):
 
             try:
                 WebDriverWait(self.driver, 1).until(EC.element_to_be_clickable((By.CLASS_NAME, 'user-info')))
@@ -392,21 +396,29 @@ class Search(Main):
 
     def sell_item(self, contract_type):
         print(inspect.stack()[0][3])
+
         time.sleep(2)
         Main.wait_for_element_click(self, el.Tabs.Club)
+        # self.driver.find_element_by_xpath(el.Tabs.Club[1]).click()
+
         time.sleep(2)
-        Main.wait_for_element_click(self, el.Tabs.ClubIn.Consumables)
+        Main.wait_for_visibility_click(self, el.Tabs.ClubIn.Consumables)
+        # Main.wait_for_element_click(self, el.Tabs.ClubIn.Consumables)
+        # self.driver.find_element_by_xpath(el.Tabs.ClubIn.Consumables[1]).click()
+
         time.sleep(2)
-        Main.wait_for_element_click(self, el.Tabs.ClubIn.Contracts)
+        Main.wait_for_visibility_click(self, el.Tabs.ClubIn.Contracts)
+
+        #Main.wait_for_element_click(self, el.Tabs.ClubIn.Contracts)
+        #self.driver.find_element_by_xpath(el.Tabs.ClubIn.Contracts[1]).click()
+
         Main.wait_for_element_click(self, (By.XPATH, Picsy['Contracts'][contract_type]['contract_player_small']))
         sell_count = 0
         try:
-            for sell in range(1, 10):
+            for sell in range(1, 30):
                 print("Starting selling")
 
                 sell_count = sell_count + 1
-                
-                
                 
                 time.sleep(1)
                 Main.wait_for_element(self, (By.XPATH, Picsy['Contracts'][contract_type]['contract_player_big']))
@@ -429,7 +441,11 @@ class Search(Main):
 
         except TimeoutException as ex:
             print(ex)
-            pyautogui.typewrite(['enter'], interval=0.1)
+            try:
+                Main.wait_for_element_click(self, el.Buttons.Ok, 1)
+            except:
+                print("strange")
+
 
     def exit(self):
         self.driver.close()
@@ -450,12 +466,18 @@ if __name__ == '__main__':
     # Start.sell_item("Rare")
     # Start.relist_and_clear_sold()
     # Start.exit()
-    Start = Search()
+
+    # for i in range(1, 10):
+    #     Start = Search()
+    #     Start.login()
+    #     Start.sell_item(random.choice(['Rare', 'Gold']))
+    #     Start.relist_and_clear_sold()
+    # sys.exit(1)
 while True:
     global first_hour
 
     run = run + 1
-
+    Start = Search()
     print('Iteration to search items : %s' % str(run))
     try:
         Start.login()
@@ -473,5 +495,5 @@ while True:
     except Exception as ex:
         print(ex)
 
-    time.sleep(randint(0, 60))
+    #time.sleep(randint(0, 60))
 
