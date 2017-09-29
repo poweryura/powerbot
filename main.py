@@ -332,22 +332,25 @@ class Search(Main):
             except:
                 pass
 
-        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, 'user-info')))
+        try:
+            Main.wait_for_element_click(self, el.Buttons.Ok)
+        except:
+            WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, 'user-info')))
 
         print("Logged IN")
 
     def search_contracts(self, contract_type):
         print(inspect.stack()[0][3])
         #pdb.set_trace()
-
+        time.sleep(2)
         WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable(el.Tabs.Transfers)); self.driver.find_element_by_xpath(el.Tabs.Transfers[1]).click()
 
         #Main.wait_for_element_click(self, el.Tabs.Transfers)
-
+        time.sleep(2)
         WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable(el.Tabs.TransfersIn.Search_Transfer_market)); self.driver.find_element_by_xpath(el.Tabs.TransfersIn.Search_Transfer_market[1]).click()
 
         #Main.wait_for_element_click(self, el.Tabs.TransfersIn.Search_Transfer_market)
-
+        time.sleep(2)
         WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable(el.Tabs.TransfersIn.SearchTransferMarket.Consumables));  self.driver.find_element_by_xpath(el.Tabs.TransfersIn.SearchTransferMarket.Consumables[1]).click()
 
         #Main.wait_for_element_click(self, el.Tabs.TransfersIn.SearchTransferMarket.Consumables);
@@ -387,11 +390,13 @@ class Search(Main):
 
         except:
             print('Nothing to relist')
+            Main.wait_for_element_click(self, el.Buttons.Ok)
 
         print("Trying to clear sold")
         try:
             Main.wait_for_element_click(self, el.Buttons.Clear_Sold, 5)
         except:
+            Main.wait_for_element_click(self, el.Buttons.Ok)
             print('Nothing to Clear')
 
     def sell_item(self, contract_type):
@@ -446,10 +451,8 @@ class Search(Main):
             except:
                 print("strange")
 
-
     def exit(self):
         self.driver.close()
-
 
 
 if __name__ == '__main__':
@@ -473,15 +476,16 @@ if __name__ == '__main__':
     #     Start.sell_item(random.choice(['Rare', 'Gold']))
     #     Start.relist_and_clear_sold()
     # sys.exit(1)
+    Start = Search()
+
 while True:
     global first_hour
 
     run = run + 1
-    Start = Search()
     print('Iteration to search items : %s' % str(run))
     try:
         Start.login()
-        Start.search_contracts(random.choice(['Rare', 'Gold']))
+        Start.search_contracts(random.choice(['Rare']))
     except Exception as ex:
         print(ex)
 
@@ -494,6 +498,9 @@ while True:
         Start.relist_and_clear_sold()
     except Exception as ex:
         print(ex)
+    
+      
+        
 
     #time.sleep(randint(0, 60))
 
