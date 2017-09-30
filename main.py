@@ -492,7 +492,7 @@ while True:
     print('Iteration to search items : %s' % str(run))
     try:
         Start.login()
-        #Start.search_contracts(random.choice(['Rare']))
+        Start.search_contracts(random.choice(['Rare']))
     except Exception as ex:
         print(ex)
 
