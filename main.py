@@ -271,27 +271,31 @@ class Main:
             #
             try:
                 self.driver.implicitly_wait(1)
-                found_list = self.driver.find_elements_by_xpath(Picsy['Contracts'][contract_type]['contract_player_small'])
+                #pdb.set_trace()
+
+                #found_list = self.driver.find_elements_by_xpath(Picsy['Contracts'][contract_type]['contract_player_small'])
+                found_list = self.driver.find_elements_by_xpath(Picsy['Contracts'][contract_type]['contract_player_value_bronze'])
+
                 random.choice(found_list).click()
                 found_item = found_item + 1
                 print("Clicking on %s" % str(found_item))
                 self.driver.find_elements_by_xpath(Picsy['Contracts'][contract_type]['contract_player_big'])
                 Main.wait_for_element_click(self, el.Buttons.SellBar.Buy_now)
-                try:
-                    Main.wait_for_element(self, (By.XPATH, "//*[contains(text(), 'Are you sure you want to buy this item for 200 coins')]"))
-                except:
-                    pass
-                try: 
-                    Main.wait_for_element(self, (By.XPATH, "//*[contains(text(), 'Are you sure you want to buy this item for 250 coins')]"))
-                except:
-                    pass
+                # try:
+                #     Main.wait_for_element(self, (By.XPATH, "//*[contains(text(), 'Are you sure you want to buy this item for 200 coins')]"), 1)
+                # except:
+                #     pass
+                # try:
+                #     Main.wait_for_element(self, (By.XPATH, "//*[contains(text(), 'Are you sure you want to buy this item for 250 coins')]"), 1)
+                # except:
+                #     pass
                 Main.wait_for_element_click(self, el.Buttons.Ok)
                 Main.wait_for_element_click(self, el.Buttons.SellBar.Send_to_My_Club)
 
             except IndexError:
                 print('Nothing found')
             except:
-                print('Failed to buy')
+                print('Looks that failed to buy')
 
 
             try:
@@ -374,6 +378,7 @@ class Search(Main):
         self.buy_contracts(contract_type)
 
     def relist_and_clear_sold(self):
+        #pdb.set_trace()
         print(inspect.stack()[0][3])
         time.sleep(1)
         Main.wait_for_element_click(self, el.Tabs.Transfers)
@@ -387,13 +392,15 @@ class Search(Main):
             time.sleep(1)
             Main.wait_for_element_click(self, el.Buttons.Yes)
             time.sleep(1)
+            Main.wait_for_element_click(self, el.Buttons.Ok)
+
 
         except:
             print('Nothing to relist')
-            Main.wait_for_element_click(self, el.Buttons.Ok)
 
         print("Trying to clear sold")
         try:
+            time.sleep(1)
             Main.wait_for_element_click(self, el.Buttons.Clear_Sold, 5)
         except:
             Main.wait_for_element_click(self, el.Buttons.Ok)
@@ -485,12 +492,12 @@ while True:
     print('Iteration to search items : %s' % str(run))
     try:
         Start.login()
-        Start.search_contracts(random.choice(['Rare']))
+        #Start.search_contracts(random.choice(['Rare']))
     except Exception as ex:
         print(ex)
 
     try:
-        Start.sell_item(random.choice(['Rare', 'Gold']))
+        Start.sell_item(random.choice(['Rare']))
     except Exception as ex:
         print(ex)
 

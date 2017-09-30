@@ -2,17 +2,25 @@ Contracts:
   Gold:
     contract_player_big: "//*[@class='large consumable item common gold']"
     contract_player_small: "//div[contains(@class, 'small consumable item common gold')]"
+    contract_player_value_bronze: "//*[@class='bronzeBoost' and contains(text(),'+15')]"
+    buy_now_price: "//*[@class='btn-subtext coins' and contains(text(),'200')]"
+
     sell_min_price: '200'
     sell_max_price: '250'
+
     bid_min_price: '150'
     buy_max_price: '200'
-    buy_now_price: "//*[@class='btn-subtext coins' and contains(text(),'200')]"
+
 
 
   Rare:
     contract_player_big: "//*[@class='large consumable item rare gold']"
     contract_player_small: "//div[contains(@class, 'small consumable item rare gold')]"
+    contract_player_value_bronze: "//*[@class='bronzeBoost' and contains(text(),'+28')]"
+    buy_now_price: "//*[@class='btn-subtext coins' and contains(text(),'300')]"
+
     sell_min_price: '300'
     sell_max_price: '350'
-    bid_min_price: '200'
-    buy_max_price: '250'
+
+    bid_min_price: '250'
+    buy_max_price: '300'
