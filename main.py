@@ -43,8 +43,8 @@ class Service(object):
     def send_mail():
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
-        server.login("yyura2014@gmail.com", "Power1234")
-        msg = "Check BOT"
+        server.login("yyura2014@gmail.com", "Power123456")
+        msg = "Check BOT Captcha"
         server.sendmail("yyura2014@gmail.com", "poweryura@gmail.com", msg)
         server.quit()
 
@@ -323,6 +323,7 @@ class Main:
 class Search(Main):
 
     def login(self):
+        pdb.set_trace()
         for i in range(1, 10):
 
             try:
@@ -345,11 +346,23 @@ class Search(Main):
                 break
             except:
                 pass
+            
+            try:
+                WebDriverWait(self.driver, 1).until(
+                    EC.visibility_of_element_located((By.XPATH, '//*[@id="FunCaptchaRequired"]')))
+                if sent != 'done':
+                    Service.send_mail()
+                sent = 'done'
+                
+            except:
+                pass
 
         try:
             Main.wait_for_element_click(self, el.Buttons.Ok)
         except:
             WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, 'user-info')))
+            
+            WebDriverWait(self.driver, 1).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="FunCaptchaRequired"]')))
 
         print("Logged IN")
 
@@ -499,7 +512,8 @@ if __name__ == '__main__':
 
 while True:
     global first_hour
-
+    global sent
+    
     run = run + 1
     print('Iteration to search items : %s' % str(run))
     try:
@@ -519,7 +533,5 @@ while True:
         print(ex)
     
       
-        
-
     time.sleep(randint(0, 60))
 
