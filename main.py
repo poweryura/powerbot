@@ -165,7 +165,7 @@ class Main:
         #     #os.system("taskkill /f /im  chrome.exe")
         # except:
         #     pass
-
+        self.sent = []
         options = webdriver.ChromeOptions()
         options.add_argument(r"user-data-dir=C:\Users\qadmin\AppData\Local\Google\Chrome\User Data")
         self.driver = webdriver.Chrome(executable_path="chromedriver.exe", chrome_options=options)
@@ -256,12 +256,11 @@ class Main:
         print('Something found, doing shopping')
         # try:
         while Main.wait_for_element(self, el.Buttons.Next) is None:
-            time.sleep(1)
+            #time.sleep(1)
             counter = counter + 1
             # for each in range(len(found_list) - 1, -1, -1):
             # found_list = self.driver.find_elements_by_xpath(Picsy['Contracts'][contract_type]['contract_player_small'])
-            
-            print(counter)
+            print('Going to page %s:' % counter)
             # for each in found_list:
             # found_contract_item = found_contract_item + 1
             # print("Clicking on %s" % str(found_contract_item))
@@ -271,31 +270,32 @@ class Main:
             #
             try:
                 self.driver.implicitly_wait(1)
-                #pdb.set_trace()
-
-                #found_list = self.driver.find_elements_by_xpath(Picsy['Contracts'][contract_type]['contract_player_small'])
                 found_list = self.driver.find_elements_by_xpath(Picsy['Contracts'][contract_type]['contract_player_value_bronze'])
-
                 random.choice(found_list).click()
                 found_item = found_item + 1
                 print("Clicking on %s" % str(found_item))
-                self.driver.find_elements_by_xpath(Picsy['Contracts'][contract_type]['contract_player_big'])
-                Main.wait_for_element_click(self, el.Buttons.SellBar.Buy_now)
                 try:
-                    Main.wait_for_element_click(self, el.Buttons.Ok)
-                    Main.wait_for_element_click(self, el.Buttons.SellBar.Send_to_My_Club)
+                    self.driver.find_elements_by_xpath(Picsy['Contracts'][contract_type]['contract_player_big'])
+                    print("Clicking on Buy Now")
+                    Main.wait_for_element_click(self, el.Buttons.SellBar.Buy_now)
                 except:
-                    Main.wait_for_element_click(self, el.Buttons.Ok)
+                    print('Did not bought')
+                    pass
+
+                try:
+                    Main.wait_for_element_click(self, el.Buttons.Ok, 1)
+                    Main.wait_for_element_click(self, el.Buttons.SellBar.Send_to_My_Club)
+                    try:
+                        Main.wait_for_element_click(self, el.Buttons.Ok, 1)
+                    except:
+                        pass
+                except:
+                    pass
+                    #
                 # try:
                 #     Main.wait_for_element(self, (By.XPATH, "//*[contains(text(), 'Are you sure you want to buy this item for 200 coins')]"), 1)
                 # except:
                 #     pass
-                # try:
-                #     Main.wait_for_element(self, (By.XPATH, "//*[contains(text(), 'Are you sure you want to buy this item for 250 coins')]"), 1)
-                # except:
-                #     pass
-
-
             except IndexError:
                 print('Nothing found')
             except:
@@ -308,10 +308,7 @@ class Main:
                 print('Pagination is end')
                 return
                 
-        print('done loop')
-            # for each in found_list:
-            #     print("clicking")
-            #     each.click()
+        print('Done whole search')
         
     def click_ok(self):
         try:
@@ -323,7 +320,8 @@ class Main:
 class Search(Main):
 
     def login(self):
-        pdb.set_trace()
+        print(inspect.stack()[0][3])
+
         for i in range(1, 10):
 
             try:
@@ -346,14 +344,19 @@ class Search(Main):
                 break
             except:
                 pass
-            
+
+            try:
+                Main.wait_for_element_click(self, el.Buttons.Continue, 1)
+            except:
+                pass
+
             try:
                 WebDriverWait(self.driver, 1).until(
                     EC.visibility_of_element_located((By.XPATH, '//*[@id="FunCaptchaRequired"]')))
-                if sent != 'done':
+                print('Sending email')
+                if self.sent != 'done':
                     Service.send_mail()
-                sent = 'done'
-                
+                self.sent = 'done'
             except:
                 pass
 
@@ -361,15 +364,13 @@ class Search(Main):
             Main.wait_for_element_click(self, el.Buttons.Ok)
         except:
             WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, 'user-info')))
-            
-            WebDriverWait(self.driver, 1).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="FunCaptchaRequired"]')))
 
         print("Logged IN")
 
     def search_contracts(self, contract_type):
         print(inspect.stack()[0][3])
-        Main.click_ok(self)
         #pdb.set_trace()
+        Main.click_ok(self)
         time.sleep(2)
         WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable(el.Tabs.Transfers)); self.driver.find_element_by_xpath(el.Tabs.Transfers[1]).click()
 
@@ -402,9 +403,8 @@ class Search(Main):
         self.buy_contracts(contract_type)
 
     def relist_and_clear_sold(self):
-        Main.click_ok(self)
-        #pdb.set_trace()
         print(inspect.stack()[0][3])
+        Main.click_ok(self)
         Main.wait_for_element_click(self, el.Tabs.Transfers)
         time.sleep(1)
         Main.wait_for_element_click(self, el.Tabs.TransfersIn.Transfer_List)
@@ -433,7 +433,6 @@ class Search(Main):
     def sell_item(self, contract_type):
         print(inspect.stack()[0][3])
         Main.click_ok(self)
-
         time.sleep(2)
         Main.wait_for_element_click(self, el.Tabs.Club)
         # self.driver.find_element_by_xpath(el.Tabs.Club[1]).click()
@@ -481,7 +480,7 @@ class Search(Main):
             try:
                 Main.wait_for_element_click(self, el.Buttons.Ok, 1)
             except:
-                print("strange")
+                print("Done Selling")
 
     def exit(self):
         self.driver.close()
@@ -508,12 +507,12 @@ if __name__ == '__main__':
     #     Start.sell_item(random.choice(['Rare', 'Gold']))
     #     Start.relist_and_clear_sold()
     # sys.exit(1)
+
     Start = Search()
 
 while True:
     global first_hour
-    global sent
-    
+
     run = run + 1
     print('Iteration to search items : %s' % str(run))
     try:
@@ -533,5 +532,5 @@ while True:
         print(ex)
     
       
-    time.sleep(randint(0, 60))
+    time.sleep(randint(0, 120))
 

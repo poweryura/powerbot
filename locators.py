@@ -12,7 +12,7 @@ class Buttons(object):
     Next = (By.XPATH, "//*[@class='btn-flat pagination next']")
     Yes = (By.XPATH, "//*[@class='btn-flat' and contains(text(),'Yes')]")
     Ok = (By.XPATH, "//*[@class='btn-flat' and contains(text(),'Ok')]")
-
+    Continue = (By.XPATH, "//*[@class='btn-text' and contains(text(),'Continue')]")
 
     class SellBar(object):
         List_on_Transfer_Market = (By.XPATH, "//*[@class='btn-text' and contains(text(),'List on Transfer Market')]")
