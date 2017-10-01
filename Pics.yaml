@@ -19,8 +19,8 @@ Contracts:
     contract_player_value_bronze: "//*[@class='bronzeBoost' and contains(text(),'+28')]"
     buy_now_price: "//*[@class='btn-subtext coins' and contains(text(),'300')]"
 
-    sell_min_price: '300'
-    sell_max_price: '350'
+    sell_min_price: '350'
+    sell_max_price: '400'
 
     bid_min_price: '250'
     buy_max_price: '300'

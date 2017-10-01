@@ -281,6 +281,11 @@ class Main:
                 print("Clicking on %s" % str(found_item))
                 self.driver.find_elements_by_xpath(Picsy['Contracts'][contract_type]['contract_player_big'])
                 Main.wait_for_element_click(self, el.Buttons.SellBar.Buy_now)
+                try:
+                    Main.wait_for_element_click(self, el.Buttons.Ok)
+                    Main.wait_for_element_click(self, el.Buttons.SellBar.Send_to_My_Club)
+                except:
+                    Main.wait_for_element_click(self, el.Buttons.Ok)
                 # try:
                 #     Main.wait_for_element(self, (By.XPATH, "//*[contains(text(), 'Are you sure you want to buy this item for 200 coins')]"), 1)
                 # except:
@@ -289,8 +294,7 @@ class Main:
                 #     Main.wait_for_element(self, (By.XPATH, "//*[contains(text(), 'Are you sure you want to buy this item for 250 coins')]"), 1)
                 # except:
                 #     pass
-                Main.wait_for_element_click(self, el.Buttons.Ok)
-                Main.wait_for_element_click(self, el.Buttons.SellBar.Send_to_My_Club)
+
 
             except IndexError:
                 print('Nothing found')
@@ -308,6 +312,12 @@ class Main:
             # for each in found_list:
             #     print("clicking")
             #     each.click()
+        
+    def click_ok(self):
+        try:
+            Main.wait_for_element_click(self, el.Buttons.Ok, 1)
+        except:
+            pass
 
 
 class Search(Main):
@@ -345,6 +355,7 @@ class Search(Main):
 
     def search_contracts(self, contract_type):
         print(inspect.stack()[0][3])
+        Main.click_ok(self)
         #pdb.set_trace()
         time.sleep(2)
         WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable(el.Tabs.Transfers)); self.driver.find_element_by_xpath(el.Tabs.Transfers[1]).click()
@@ -378,9 +389,9 @@ class Search(Main):
         self.buy_contracts(contract_type)
 
     def relist_and_clear_sold(self):
+        Main.click_ok(self)
         #pdb.set_trace()
         print(inspect.stack()[0][3])
-        time.sleep(1)
         Main.wait_for_element_click(self, el.Tabs.Transfers)
         time.sleep(1)
         Main.wait_for_element_click(self, el.Tabs.TransfersIn.Transfer_List)
@@ -408,6 +419,7 @@ class Search(Main):
 
     def sell_item(self, contract_type):
         print(inspect.stack()[0][3])
+        Main.click_ok(self)
 
         time.sleep(2)
         Main.wait_for_element_click(self, el.Tabs.Club)
@@ -509,5 +521,5 @@ while True:
       
         
 
-    #time.sleep(randint(0, 60))
+    time.sleep(randint(0, 60))
 
